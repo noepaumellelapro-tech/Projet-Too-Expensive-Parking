@@ -7,6 +7,7 @@
 //définition des fonctions présentes dans map.c
 void print_map(char Map[MAX_ROWS][MAX_COLS], int rows, int cols);
 void read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS]);
+void affichage_graphique();
 
 
 #endif

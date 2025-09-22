@@ -73,4 +73,10 @@ void read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS]) {
     print_map(Map, i + 1, nb_col); //Affichage de la map
 };
 
-
+void affichage_graphique(){
+    initscr();              // Start curses mode
+    printw("Hello World !");  // Print Hello World
+    refresh();              // Print it on to the real screen
+    getch();               // Wait for user input
+    endwin();               // End curses mode
+}

@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 
-Struct Vehicule {
+struct Vehicule {
     int x; //position x
     int y; //position y
     char direction; //direction (N, S, E, O)
