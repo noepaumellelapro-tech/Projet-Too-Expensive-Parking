@@ -5,7 +5,7 @@
 #define MAX_COLS 200
 
 
-//affichage de la map 
+/*
 void print_map(char Map[MAX_ROWS][MAX_COLS], int rows, int cols) {
     
     for (int i = 0; i < rows; i++) {
@@ -22,12 +22,12 @@ void print_map(char Map[MAX_ROWS][MAX_COLS], int rows, int cols) {
         printf("\n");
     }
     
-};
+};*/
 
 
 void affichage_graphique(char Map[MAX_ROWS][MAX_COLS], int rows, int cols){
 
-    initscr();              // Start curses mode
+    initscr();              // lance curses mode
     clear();  
 
     for (int i = 0; i < rows; i++) {
@@ -45,9 +45,9 @@ void affichage_graphique(char Map[MAX_ROWS][MAX_COLS], int rows, int cols){
         
     }
     
-    //refresh();              // Print it on to the real screen
-    getch();               // Wait for user input
-    endwin();               // End curses mode
+    //refresh();              
+    getch();               
+    endwin();               // arret curses mode
 }
 
 
