@@ -25,6 +25,33 @@ void print_map(char Map[MAX_ROWS][MAX_COLS], int rows, int cols) {
 };
 
 
+void affichage_graphique(char Map[MAX_ROWS][MAX_COLS], int rows, int cols){
+
+    initscr();              // Start curses mode
+    clear();  
+
+    for (int i = 0; i < rows; i++) {
+
+        for (int j = 0; j < cols; j++) {
+
+            //On bouge au bon endroit
+            move(i,j);
+            //affichage du caractère
+            addch(Map[i][j]);
+
+        }
+
+        //retoiur a la ligne après chaque ligne
+        
+    }
+    
+    //refresh();              // Print it on to the real screen
+    getch();               // Wait for user input
+    endwin();               // End curses mode
+}
+
+
+
 //lecture de la map depuis un fichier et affichage via print_map
 void read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS]) {
     
@@ -70,13 +97,6 @@ void read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS]) {
 
     fclose(FichierMap);
     
-    print_map(Map, i + 1, nb_col); //Affichage de la map
+    //print_map(Map, i + 1, nb_col); //Affichage de la map
+    affichage_graphique(Map, i + 1, nb_col);
 };
-
-void affichage_graphique(){
-    initscr();              // Start curses mode
-    printw("Hello World !");  // Print Hello World
-    refresh();              // Print it on to the real screen
-    getch();               // Wait for user input
-    endwin();               // End curses mode
-}
