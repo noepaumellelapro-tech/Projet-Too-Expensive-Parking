@@ -147,5 +147,5 @@ void read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS]) {
     fclose(FichierMap);
     
     //print_map(Map, i + 1, nb_col); //Affichage de la map
-    affichage_interface(Map, i + 3, nb_col );
+    affichage_interface(Map, i + 3, nb_col + 2);
 };

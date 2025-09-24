@@ -8,7 +8,7 @@ int main(void)
 
   
 
-   read_map("Map_1.txt", Map);
+   read_map("Map_2.txt", Map);
   
     return 0;
 }
