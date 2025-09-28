@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ncurses.h>
 #include "map.h"
+#include "vehicule.h"
 
 int main(void)
 {

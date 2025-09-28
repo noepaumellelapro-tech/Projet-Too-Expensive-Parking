@@ -2,18 +2,33 @@
 #include <stdlib.h>
 #include "vehicule.h"
 
-Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, char symbole[2][3]) {
+
+
+// fonction qui permet de créer un vehicule et
+Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, char alignement, 
+                        char type, char etat, unsigned long int tps, char symbole[2][3]) {
+                            
     Vehicule* v = (Vehicule*)malloc(sizeof(Vehicule));
+
     // si l'allocation échoue on alt f4
+
     if (v == NULL) {
         printf("Erreur d'allocation mémoire");
         exit(EXIT_FAILURE);
     }
+
+    // les attributs du vehicule
     v->x = x;
     v->y = y;
     v->direction = direction;
     v->vitesse = vitesse;
     v->couleur = couleur;
+    v->alignement = alignement;
+    v->type = type;
+    v->etat = etat;
+    v->tps = tps;
+
+
     // pour copier la voiture (temporaire)
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 3; j++) {
@@ -24,22 +39,34 @@ Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, 
     return v;
 }
 
+
+
+
+// fonction qui permet de supprimer un vehicule de la memoire
 void detruireVehicule(Vehicule* v) {
     free(v);
 }
 
+
+
 // Permet d'ajouter une voiture a la listee de voiture
 void ajoutervehicule(Vehicule **debutliste, Vehicule *nouvellevoiture) {
+
     if (*debutliste == NULL) { // si la premiere case est vide nulll elle devient la premiere case
         *debutliste = nouvellevoiture;
+
     } else { // sinon on va a la derniere case et on ajouter une voiiteure
         Vehicule *parcourirliste = *debutliste;
+
         while (parcourirliste->suivant != NULL) { // permet de parcourir la liste jusqua que sa soit nulll
             parcourirliste = parcourirliste->suivant;
         }
+        
         parcourirliste->suivant = nouvellevoiture; // une fois a la fin on ajoute une voituree
     }
 }
+
+
 
 // Fonction qui permet de supprimer une voiture de la liste
 void supprimervoitureliste(Vehicule **debutliste, Vehicule *voitureasupprimer) {
