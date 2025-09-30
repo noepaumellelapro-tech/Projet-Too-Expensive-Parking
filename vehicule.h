@@ -23,4 +23,6 @@ void detruireVehicule(Vehicule* v);
 
 void supprimervoitureliste(Vehicule **debutliste, Vehicule *voitureasupprimer);
 
+void afficherVehicule(Vehicule *v);
+
 #endif

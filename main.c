@@ -10,6 +10,7 @@ int main(void)
   
 
    read_map("Map_2.txt", Map);
+   random_car();
   
     return 0;
 }

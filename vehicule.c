@@ -95,3 +95,25 @@ void supprimervoitureliste(Vehicule **debutliste, Vehicule *voitureasupprimer) {
     }
 }
 
+void afficherVehicule(Vehicule *v) {
+    if (v == NULL) {
+        printf("Le véhicule est NULL.\n");
+        return;
+    }
+    printf("Position: (%d, %d)\n", v->x, v->y);
+    printf("Direction: %c\n", v->direction);
+    printf("Vitesse: %d\n", v->vitesse);
+    printf("Couleur: %d\n", v->couleur);
+    printf("Alignement: %c\n", v->alignement);
+    printf("Type: %c\n", v->type);
+    printf("État: %c\n", v->etat);
+    printf("Temps sur le parking: %lu\n", v->tps);
+    printf("Symbole:\n");
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 3; j++) {
+            printf("%c ", v->symbole[i][j]);
+        }
+        printf("\n");
+    }
+}
+
