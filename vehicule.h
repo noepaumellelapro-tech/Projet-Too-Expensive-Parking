@@ -2,6 +2,7 @@
 #define VEHICULE_H
 
 typedef struct vehicule{
+    unsigned int id;
     int x; //position x
     int y; //position y
     char direction; //direction (N, S, E, O)
@@ -17,12 +18,16 @@ typedef struct vehicule{
 
 Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, char alignement, char type, char etat, unsigned long int tps, char symbole[2][3]);
 
-void ajoutervehicule(Vehicule **debutliste, Vehicule *nouvellevoiture);
+void ajoutervehicule(Vehicule **liste, Vehicule *nouvellevoiture);
 
 void detruireVehicule(Vehicule* v);
 
-void supprimervoitureliste(Vehicule **debutliste, Vehicule *voitureasupprimer);
+int supprimervoitureliste(Vehicule **liste, unsigned int id);
 
 void afficherVehicule(Vehicule *v);
+
+void afficherliste(Vehicule *liste);
+
+void libererliste(Vehicule **liste);
 
 #endif

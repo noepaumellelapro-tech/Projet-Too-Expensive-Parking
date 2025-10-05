@@ -1,36 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "random.h"
 #include "vehicule.h"
 
-void random_car(){
+void random_car(Vehicule **liste) {
 
-    srand(time(NULL));
+    // Générer 4 véhicules aléatoires
+    for(int i =0; i<4; i++){
+    int couleurs         = rand() % 5; 
+    int vitesse          = rand() % 5; 
+    char type            = (rand() % 2)  ? 'C' : 'V'; // C pour voiture, V pour camion
+    char alignement      = (rand() % 2)  ? 'G' : 'D'; // G pour gauche, D pour droite 
 
-    int couleurs = rand() % 5; // 0, 1, 2
-    int alignementrand = rand() % 1; // 0, 1,
-    int vitesse = rand() % 5; // 0, 1, 2
-    int typerand = rand() % 1;
-    char type;
-    char alignement;
+     Vehicule* v = creerVehicule(0, 0, 'N', vitesse, couleurs, alignement, type, 'M', 0, (char[2][3]){{' ', 'A', ' '}, {' ', ' ', ' '}});
+     ajoutervehicule(liste, v);
 
-    if(typerand == 0){
-         type = 'C'; // camion
-    } else if (type == 1){
-         type = 'V'; // voiture
-    } 
-
-    if(alignementrand == 0){
-         alignement = 'G'; // gauche
-    } else if (alignementrand == 1){
-         alignement = 'D'; // droite
+     return;
     }
 
-
-
-    creerVehicule(0, 0, 'N', vitesse, couleurs, alignement, type, 'M', 0, (char[2][3]){{' ', 'A', ' '}, {' ', ' ', ' '}});
-
-
-    
 }
