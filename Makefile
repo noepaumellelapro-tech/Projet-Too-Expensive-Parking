@@ -2,7 +2,7 @@ CC=gcc
 LDFLAGS=-lncurses
 
 # Options de compilation
-SRC=main.c map.c vehicule.c
+SRC=main.c map.c vehicule.c random.c
 OBJ=$(SRC:.c=.o)
 EXEC=parking
 
