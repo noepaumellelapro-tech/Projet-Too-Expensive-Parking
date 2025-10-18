@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #include <ncurses.h>
 
 #define MAX_ROWS 100

@@ -1,6 +1,10 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <stdio.h>
+
+#include <ncurses.h>
+
 #define MAX_ROWS 100
 #define MAX_COLS 200
 
