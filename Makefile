@@ -1,8 +1,9 @@
 CC=gcc
-LDFLAGS=-lncurses
+CFLAGS = -Wall -Wextra -O2 `sdl2-config --cflags`
+LDFLAGS=-lncurses `sdl2-config --libs`
 
 # Options de compilation
-SRC=main.c map.c vehicule.c random.c
+SRC=main.c map.c vehicule.c random.c MapTest.c
 OBJ=$(SRC:.c=.o)
 EXEC=parking
 

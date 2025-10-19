@@ -5,6 +5,7 @@
 #include "map.h"
 #include "vehicule.h"
 #include "random.h"
+#include "Interface.h"
 
 int main(void)
 {
@@ -18,7 +19,12 @@ int main(void)
 */
 
     char Map [MAX_ROWS][MAX_COLS];
-    read_map("Map_2.txt", Map);
+    int rows = 0;
+    int cols = 0;
+    //read_map("Map_2.txt", Map);
+
+
+    interface ("Map_2.txt", Map, &rows, &cols);
 
 return EXIT_SUCCESS;
 }

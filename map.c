@@ -103,7 +103,7 @@ void affichage_interface(char Map[MAX_ROWS][MAX_COLS], int RECTANGLE_RAWS, int R
 
 
 //lecture de la map depuis un fichier et affichage via print_map
-void read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS]) {
+void read_mapp(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS]) {
     
     int i = 0; //Lignes
     int j = 0; //Colonnes
