@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ncurses.h>
-#include "map.h"
+//#include "map.h"
 #include "vehicule.h"
 #include "random.h"
 #include "Interface.h"
@@ -24,7 +24,7 @@ int main(void)
     //read_map("Map_2.txt", Map);
 
 
-    interface ("Map_2.txt", Map, &rows, &cols);
+    interface ("Map_1.txt", Map, &rows, &cols);
 
 return EXIT_SUCCESS;
 }

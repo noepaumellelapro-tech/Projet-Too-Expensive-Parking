@@ -2,7 +2,7 @@
 #define INTERFACE_H
 
 #include <SDL2/SDL.h>
-#define MAX_ROWS 100
+#define MAX_ROWS 200
 #define MAX_COLS 200
 //#define CELL_SIZE 5  // Taille d'une cellule en pixels
 

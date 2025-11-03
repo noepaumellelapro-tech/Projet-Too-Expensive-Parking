@@ -29,29 +29,32 @@ void SDLDestroyWindow(SDL_Window* window, SDL_Renderer* renderer){
 
 void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows, int nb_cols, SDL_Rect rect) {
 
-    int cellW = rect.w / nb_cols;
-    int cellH = rect.h / nb_rows;
+    //int cellW = rect.w / nb_cols;
+    //int cellH = rect.h / nb_rows;
+
+    float cellW = (float)rect.w / nb_cols;
+    float cellH = (float)rect.h / nb_rows;
 
     for (int i = 0; i < nb_rows; i++) {
         for (int j = 0; j < nb_cols; j++) {
             char c = Map[i][j];
 
-            SDL_Rect cell = {
-                rect.x + j * cellW,
-                rect.y + i * cellH,
-                cellW,
-                cellH
+            SDL_FRect cell = {
+            rect.x + j * cellW,
+            rect.y + i * cellH,
+            cellW,
+            cellH
             };
 
             if (c == '|') {
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                SDL_RenderDrawLine(renderer,
+                SDL_RenderDrawLineF(renderer,
                                    cell.x + cellW / 2, cell.y,
                                    cell.x + cellW / 2, cell.y + cellH);
             }
             else if (c == '_') {
                 SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                SDL_RenderDrawLine(renderer,
+                SDL_RenderDrawLineF(renderer,
                                    cell.x, cell.y + cellH / 2,
                                    cell.x + cellW, cell.y + cellH / 2);
             }
@@ -82,15 +85,15 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     int nbCols = *nb_cols;
     int nbRows = *nb_rows;
 
-    //calcul de la taille idéale des cellules
-    int cellW = screenW / *nb_cols;
-    int cellH = screenH / *nb_rows;
-    int CELL_SIZE = (cellW < cellH) ? cellW : cellH;
+    // --- Calcul précis en flottant ---
+    float cellW = (float)screenW / nbCols;
+    float cellH = (float)screenH / nbRows;
+    float CELL_SIZE = (cellW < cellH) ? cellW : cellH;
 
-    // Calcul du rectangle englobant la map
+    // Calcul du rectangle englobant la map (en entiers pour SDL_Rect)
     SDL_Rect rect;
-    rect.w = nbCols * CELL_SIZE;
-    rect.h = nbRows * CELL_SIZE;
+    rect.w = (int)(nbCols * CELL_SIZE);
+    rect.h = (int)(nbRows * CELL_SIZE);
     rect.x = (screenW - rect.w) / 2;
     rect.y = (screenH - rect.h) / 2;
 
@@ -141,13 +144,18 @@ int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows,
             break;
 
         if (c == '\n') {
-            if (i == 0) nb_col = j; // largeur de la première ligne
+
+            if (i == 0){
+                nb_col = j; // largeur de la première ligne
+            }
+
             i++;
             j = 0;
             continue;
         }
 
         Map[i][j] = c;
+        
         j++;
     }
 
