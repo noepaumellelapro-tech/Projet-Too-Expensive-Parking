@@ -1,6 +1,7 @@
 #include "Interface.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include "vehicule.h"
 
 //créé une fenetre SDL
 SDL_Window* SDLCreateWindow(){
@@ -21,6 +22,7 @@ SDL_Window* SDLCreateWindow(){
     }
     return window;
 }
+
 void SDLDestroyWindow(SDL_Window* window, SDL_Renderer* renderer){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -58,17 +60,30 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
                                    cell.x, cell.y + cellH / 2,
                                    cell.x + cellW, cell.y + cellH / 2);
             }
+            else if (c == 'G') {    //green
+                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                SDL_RenderFillRectF(renderer, &cell);
+            }
+            else if (c == 'R') {    //red
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                SDL_RenderFillRectF(renderer, &cell);
+            }
+            else if (c == 'B') {    //blue
+                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                SDL_RenderFillRectF(renderer, &cell);
+            }
+            
             // sinon espace => rien
         }
     }
 }
 
-int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols) {
+int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols, Vehicule* listeVehicules) {
 
 
     SDL_Window* window = SDLCreateWindow();
 
-    read_map(nomFichier, Map, nb_rows, nb_cols);
+    read_map(nomFichier, Map, nb_rows, nb_cols, listeVehicules);
 
     // Création du renderer
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -124,7 +139,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
 
 
 //lecture de la map depuis un fichier et affichage
-int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols)
+int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols, Vehicule* listeVehicules)
 {
     int i = 0; // lignes
     int j = 0; // colonnes
@@ -164,6 +179,41 @@ int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows,
     // Enregistrer les dimensions de la carte
     *nb_rows = i + 1;
     *nb_cols = nb_col;
+
+    // Ajout des vehicules sur la map
+    while (listeVehicules != NULL) {
+        Vehicule* v = listeVehicules;
+
+        int carUpBool = (v->direction == 'N' || v->direction == 'S') ? 1 : 0;
+
+        //test si le vehicules peut etre placé sur la map ou il se trouve dans un mur
+        for (int m = 0; m < 2 + carUpBool ; m++) {
+            for (int n = 0; n < 3 - carUpBool ; n++) {
+                if (Map[v->x + m][v->y + n] != ' '){
+                    printf("le vehicule avec l'id %d ne peut pas etre placé sur la map\n", v->id);
+                    return 0; // échec a cause d'un vehicule dans un mur
+                }
+
+                switch (v->direction) //Permet de mettre la voiture dans la bonne direction
+                {
+                    case 'N':
+                        Map[v->x + m][v->y + n] = v->symbole[n][m];
+                        break;
+                    case 'S':
+                        Map[v->x + m][v->y + n] = v->symbole[n][2-m];
+                        break;
+                    case 'E':
+                        Map[v->x + m][v->y + n] = v->symbole[m][2-n];
+                        break;
+                    case 'O':
+                        Map[v->x + m][v->y + n] = v->symbole[m][n];
+                        break;
+                }   
+            }
+        }
+
+        listeVehicules = v->suivant;
+    }
 
     return 1; // succès
 }

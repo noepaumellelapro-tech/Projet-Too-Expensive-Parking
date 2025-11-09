@@ -1,6 +1,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+#include "vehicule.h"
 #include <SDL2/SDL.h>
 #define MAX_ROWS 200
 #define MAX_COLS 200
@@ -10,9 +11,9 @@
 
 SDL_Window* SDLCreateWindow();
 void SDLDestroyWindow(SDL_Window* window, SDL_Renderer* renderer);
-int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols) ;
+int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols, Vehicule* listeVehicules) ;
 void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows, int nb_cols, SDL_Rect rect) ;
-int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols);
+int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols, Vehicule* listeVehicules);
 
 
 #endif // INTERFACE_H

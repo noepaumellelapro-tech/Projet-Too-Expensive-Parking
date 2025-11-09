@@ -23,8 +23,12 @@ int main(void)
     int cols = 0;
     //read_map("Map_2.txt", Map);
 
+    //Generation d'un vehicule de test
+    Vehicule *liste = creerVehicule(15, 15, 'N', 5, 3, 'D', 'C', 'M', 0, (char[2][3]){{'R', 'G', 'G'}, {'R', 'G', 'G'}});
 
-    interface ("Map_1.txt", Map, &rows, &cols);
+    interface("Map_2.txt", Map, &rows, &cols, liste);
+
+    libererliste(&liste); // Libère la mémoire allouée pour la liste des véhicules
 
 return EXIT_SUCCESS;
 }
