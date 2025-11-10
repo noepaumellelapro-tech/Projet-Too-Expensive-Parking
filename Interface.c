@@ -31,8 +31,6 @@ void SDLDestroyWindow(SDL_Window* window, SDL_Renderer* renderer){
 
 void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows, int nb_cols, SDL_Rect rect) {
 
-    //int cellW = rect.w / nb_cols;
-    //int cellH = rect.h / nb_rows;
 
     float cellW = (float)rect.w / nb_cols;
     float cellH = (float)rect.h / nb_rows;
@@ -109,8 +107,10 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     SDL_Rect rect;
     rect.w = (int)(nbCols * CELL_SIZE);
     rect.h = (int)(nbRows * CELL_SIZE);
-    rect.x = (screenW - rect.w) / 2;
+    rect.x = (screenW - rect.w) / 2 ;
     rect.y = (screenH - rect.h) / 2;
+
+       
 
     // Boucle principale
     SDL_Event event;
