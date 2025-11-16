@@ -35,45 +35,51 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
     float cellW = (float)rect.w / nb_cols;
     float cellH = (float)rect.h / nb_rows;
 
-    for (int i = 0; i < nb_rows; i++) {
-        for (int j = 0; j < nb_cols; j++) {
-            char c = Map[i][j];
+    
+        for (int i = 0; i < nb_rows; i++) {
+            for (int j = 0; j < nb_cols; j++) {
+                char c = Map[i][j];
 
-            SDL_FRect cell = {
-            rect.x + j * cellW,
-            rect.y + i * cellH,
-            cellW,
-            cellH
-            };
+                SDL_FRect cell = {
+                rect.x + j * cellW,
+                rect.y + i * cellH,
+                cellW,
+                cellH
+                };
 
-            if (c == '|') {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                SDL_RenderDrawLineF(renderer,
-                                   cell.x + cellW / 2, cell.y,
-                                   cell.x + cellW / 2, cell.y + cellH);
-            }
-            else if (c == '_') {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                SDL_RenderDrawLineF(renderer,
-                                   cell.x, cell.y + cellH / 2,
-                                   cell.x + cellW, cell.y + cellH / 2);
-            }
-            else if (c == 'G') {    //green
-                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-                SDL_RenderFillRectF(renderer, &cell);
-            }
-            else if (c == 'R') {    //red
-                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                SDL_RenderFillRectF(renderer, &cell);
-            }
-            else if (c == 'B') {    //blue
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                SDL_RenderFillRectF(renderer, &cell);
-            }
-            
+                if (c == '|') {
+                    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                    SDL_RenderDrawLineF(renderer,
+                                    cell.x + cellW / 2, cell.y,
+                                    cell.x + cellW / 2, cell.y + cellH);
+                }
+                else if (c == '_') {
+                    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                    SDL_RenderDrawLineF(renderer,
+                                    cell.x, cell.y + cellH / 2,
+                                    cell.x + cellW, cell.y + cellH / 2);
+                }
+                else if (c == 'G') {    //green
+                    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                    SDL_RenderFillRectF(renderer, &cell);
+                }
+                else if (c == 'R') {    //red
+                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                    SDL_RenderFillRectF(renderer, &cell);
+                }
+                else if (c == 'B') {    //blue
+                    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                    SDL_RenderFillRectF(renderer, &cell);
+                }
+                
             // sinon espace => rien
+            }
+
         }
-    }
+        
+    
+
+    
 }
 
 int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols, Vehicule* listeVehicules) {
@@ -134,7 +140,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     }
 
     SDLDestroyWindow(window, renderer);
-    return 1;
+    return 0;
 }
 
 
