@@ -79,7 +79,7 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
             
         }
         
-    
+    }
 
     
 }
@@ -89,7 +89,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
 
     SDL_Window* window = SDLCreateWindow();
 
-    read_map(nomFichier, Map, nb_rows, nb_cols, listeVehicules);
+    read_map(nomFichier, Map, nb_rows, nb_cols);
 
     // Création du renderer
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -118,7 +118,8 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     rect.x = (screenW - rect.w) / 2 ;
     rect.y = (screenH - rect.h) / 2;
 
-       
+    //A retirer
+    Vehicule* v = listeVehicules;
 
     // Boucle principale
     SDL_Event event;
@@ -135,6 +136,13 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         // Rectangle blanc
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderDrawRect(renderer, &rect);
+        
+        //Vehicule sur la map
+        SDL_Delay(100);
+        supprimervehiculeMap(Map,listeVehicules);
+        //A changer par une fonction de deplacement des vehicules
+        v->y -= 1;
+        ajoutervehiculeMap(Map, listeVehicules);
 
         DessinMap(renderer, Map, nbRows, nbCols, rect);
 
@@ -184,8 +192,28 @@ int ajoutervehiculeMap(char Map[MAX_ROWS][MAX_COLS], Vehicule* listeVehicules){
     return 1; // succès
 }
 
+int supprimervehiculeMap(char Map[MAX_ROWS][MAX_COLS], Vehicule* listeVehicules) {
+
+    while (listeVehicules != NULL) {
+        Vehicule* v = listeVehicules;
+
+        int carUpBool = (v->direction == 'N' || v->direction == 'S') ? 1 : 0;
+
+        // On enlève simplement toutes les cases occupées par le véhicule
+        for (int m = 0; m < 2 + carUpBool ; m++) {
+            for (int n = 0; n < 3 - carUpBool ; n++) {
+                Map[v->x + m][v->y + n] = ' ';
+            }
+        }
+
+        listeVehicules = v->suivant;
+    }
+
+    return 1;
+}
+
 //lecture de la map depuis un fichier et affichage
-int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols, Vehicule* listeVehicules)
+int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols)
 {
     int i = 0; // lignes
     int j = 0; // colonnes
@@ -225,8 +253,6 @@ int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows,
     // Enregistrer les dimensions de la carte
     *nb_rows = i + 1;
     *nb_cols = nb_col;
-
-    ajoutervehiculeMap(Map, listeVehicules);
 
     return 1;
 

@@ -9,7 +9,7 @@ void random_car(Vehicule **liste) {
     char alignement      = (rand() % 2)  ? 'G' : 'D'; // G pour gauche, D pour droite 
     
 
-     Vehicule *v = creerVehicule(15, 15, 'N', vitesse, couleurs, alignement, type, 'M', 0,(char[2][3]){{'R', 'G', 'G'}, {'R', 'G', 'G'}});
+     Vehicule *v = creerVehicule(63, 137, 'O', vitesse, couleurs, alignement, type, 'M', 0,(char[2][3]){{'R', 'G', 'G'}, {'R', 'G', 'G'}});
      ajoutervehicule(liste, v);
 
 }
