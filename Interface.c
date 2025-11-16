@@ -45,33 +45,37 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
             cellW,
             cellH
             };
+            
 
-            if (c == '|') {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                SDL_RenderDrawLineF(renderer,
-                                   cell.x + cellW / 2, cell.y,
-                                   cell.x + cellW / 2, cell.y + cellH);
-            }
-            else if (c == '_') {
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-                SDL_RenderDrawLineF(renderer,
-                                   cell.x, cell.y + cellH / 2,
-                                   cell.x + cellW, cell.y + cellH / 2);
-            }
-            else if (c == 'G') {    //green
-                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-                SDL_RenderFillRectF(renderer, &cell);
-            }
-            else if (c == 'R') {    //red
-                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                SDL_RenderFillRectF(renderer, &cell);
-            }
-            else if (c == 'B') {    //blue
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                SDL_RenderFillRectF(renderer, &cell);
+            switch (c) {
+                case '|':
+                    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                    SDL_RenderDrawLineF(renderer,
+                                       cell.x + cellW / 2, cell.y,
+                                       cell.x + cellW / 2, cell.y + cellH);
+                    break;
+                case '_':
+                    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                    SDL_RenderDrawLineF(renderer,
+                                        cell.x, cell.y + cellH / 2,
+                                        cell.x + cellW, cell.y + cellH / 2);
+                    break;
+                case 'G':   //green
+                    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                    SDL_RenderFillRectF(renderer, &cell);
+                    break;
+                case 'R':   //red
+                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                    SDL_RenderFillRectF(renderer, &cell);
+                    break;
+                case 'B':   //blue
+                    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                    SDL_RenderFillRectF(renderer, &cell);
+                    break;
+                default:    // espace ou autre caractère non géré
+                    break;
             }
             
-            // sinon espace => rien
         }
     }
 }
