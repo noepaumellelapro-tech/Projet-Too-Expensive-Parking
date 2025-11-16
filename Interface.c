@@ -138,6 +138,44 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
 }
 
 
+int ajoutervehiculeMap(char Map[MAX_ROWS][MAX_COLS], Vehicule* listeVehicules){
+    // Ajout des vehicules sur la map
+    while (listeVehicules != NULL) {
+        Vehicule* v = listeVehicules;
+
+        int carUpBool = (v->direction == 'N' || v->direction == 'S') ? 1 : 0;
+
+        //test si le vehicules peut etre placé sur la map ou il se trouve dans un mur
+        for (int m = 0; m < 2 + carUpBool ; m++) {
+            for (int n = 0; n < 3 - carUpBool ; n++) {
+                if (Map[v->x + m][v->y + n] != ' '){
+                    printf("le vehicule avec l'id %d ne peut pas etre placé sur la map\n", v->id);
+                    return 0; // échec a cause d'un vehicule dans un mur
+                }
+
+                switch (v->direction) //Permet de mettre la voiture dans la bonne direction
+                {
+                    case 'N':
+                        Map[v->x + m][v->y + n] = v->symbole[n][m];
+                        break;
+                    case 'S':
+                        Map[v->x + m][v->y + n] = v->symbole[n][2-m];
+                        break;
+                    case 'E':
+                        Map[v->x + m][v->y + n] = v->symbole[m][2-n];
+                        break;
+                    case 'O':
+                        Map[v->x + m][v->y + n] = v->symbole[m][n];
+                        break;
+                }   
+            }
+        }
+
+        listeVehicules = v->suivant;
+    }
+    return 1; // succès
+}
+
 //lecture de la map depuis un fichier et affichage
 int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols, Vehicule* listeVehicules)
 {
@@ -180,40 +218,9 @@ int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows,
     *nb_rows = i + 1;
     *nb_cols = nb_col;
 
-    // Ajout des vehicules sur la map
-    while (listeVehicules != NULL) {
-        Vehicule* v = listeVehicules;
+    ajoutervehiculeMap(Map, listeVehicules);
 
-        int carUpBool = (v->direction == 'N' || v->direction == 'S') ? 1 : 0;
+    return 1;
 
-        //test si le vehicules peut etre placé sur la map ou il se trouve dans un mur
-        for (int m = 0; m < 2 + carUpBool ; m++) {
-            for (int n = 0; n < 3 - carUpBool ; n++) {
-                if (Map[v->x + m][v->y + n] != ' '){
-                    printf("le vehicule avec l'id %d ne peut pas etre placé sur la map\n", v->id);
-                    return 0; // échec a cause d'un vehicule dans un mur
-                }
-
-                switch (v->direction) //Permet de mettre la voiture dans la bonne direction
-                {
-                    case 'N':
-                        Map[v->x + m][v->y + n] = v->symbole[n][m];
-                        break;
-                    case 'S':
-                        Map[v->x + m][v->y + n] = v->symbole[n][2-m];
-                        break;
-                    case 'E':
-                        Map[v->x + m][v->y + n] = v->symbole[m][2-n];
-                        break;
-                    case 'O':
-                        Map[v->x + m][v->y + n] = v->symbole[m][n];
-                        break;
-                }   
-            }
-        }
-
-        listeVehicules = v->suivant;
-    }
-
-    return 1; // succès
+    
 }
