@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "vehicule.h"
+#include "mouvement.h"
 
 //créé une fenetre SDL
 SDL_Window* SDLCreateWindow(){
@@ -141,7 +142,8 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_Delay(100);
         supprimervehiculeMap(Map,listeVehicules);
         //A changer par une fonction de deplacement des vehicules
-        v->y -= 1;
+        mouvement_vehicules(v);
+        
         ajoutervehiculeMap(Map, listeVehicules);
 
         DessinMap(renderer, Map, nbRows, nbCols, rect);

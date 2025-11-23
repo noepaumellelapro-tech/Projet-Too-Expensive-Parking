@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -O2 `sdl2-config --cflags`
 LDFLAGS= `sdl2-config --libs`
 
 # Options de compilation
-SRC=main.c vehicule.c random.c Interface.c
+SRC=main.c vehicule.c random.c Interface.c mouvement.c
 OBJ=$(SRC:.c=.o)
 EXEC=parking
 

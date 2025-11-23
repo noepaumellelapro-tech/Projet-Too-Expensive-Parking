@@ -13,10 +13,11 @@ typedef struct vehicule{
     char etat; // il bouge ou il bouge pas
     unsigned long int tps; // temps passé sur le parking
     char symbole[2][3]; //symbole du véhicule
+    int place; //place de parking attribué
     struct vehicule* suivant; //ptr vers la voiture dapres
 } Vehicule;
 
-Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, char alignement, char type, char etat, unsigned long int tps, char symbole[2][3]);
+Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, char alignement, char type, char etat, unsigned long int tps, char symbole[2][3], int place);
 
 void ajoutervehicule(Vehicule **liste, Vehicule *nouvellevoiture);
 
@@ -29,5 +30,6 @@ void afficherVehicule(Vehicule *v);
 void afficherliste(Vehicule *liste);
 
 void libererliste(Vehicule **liste);
+void mouvement_vehicules(Vehicule *listeVehicules);
 
 #endif

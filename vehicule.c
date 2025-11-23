@@ -6,7 +6,7 @@
 
 // fonction qui permet de créer un vehicule et
 Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, char alignement, 
-    char type, char etat, unsigned long int tps, char symbole[2][3]) {
+    char type, char etat, unsigned long int tps, char symbole[2][3], int place) {
         
         Vehicule* v = (Vehicule*)malloc(sizeof(Vehicule));
         static unsigned int next_id = 1; // Variable statique pour générer des IDs uniques
@@ -29,6 +29,7 @@ Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, 
         v->type = type;
         v->etat = etat;
         v->tps = tps;
+        v->place = place;
         
         
         // pour copier la voiture (temporaire)
@@ -39,7 +40,7 @@ Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, 
         }
         v->suivant = NULL; // on initalise le pointeur suivant à NULL
         return v;
-    }
+}
     
     
     
@@ -133,3 +134,4 @@ Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, 
         *liste = NULL;
         printf("liste liberée\n");
     }
+
