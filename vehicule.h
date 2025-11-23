@@ -17,7 +17,7 @@ typedef struct vehicule{
     struct vehicule* suivant; //ptr vers la voiture dapres
 } Vehicule;
 
-Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, char alignement, char type, char etat, unsigned long int tps, char symbole[2][3], int place);
+Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, char alignement, char type, char etat, unsigned long int tps, char symbole [2][3], int place);
 
 void ajoutervehicule(Vehicule **liste, Vehicule *nouvellevoiture);
 

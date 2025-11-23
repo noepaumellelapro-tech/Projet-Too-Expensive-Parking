@@ -30,13 +30,40 @@ void SDLDestroyWindow(SDL_Window* window, SDL_Renderer* renderer){
     SDL_Quit();
 }
 
-void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows, int nb_cols, SDL_Rect rect) {
+void afficherRect(SDL_Renderer* renderer, SDL_FRect* rect, int r, int g, int b){    //Affiche un rectangle de couleur donnée dans la zone définie par rect
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+    SDL_RenderFillRectF(renderer, rect);
+}
 
+void setInnerRect(SDL_FRect* innerRect, char c, char Map[MAX_ROWS][MAX_COLS], int i, int j, int x, int y, int w, int h){  //definit la taille du rectangle interne (pour les vitres)
+    
+    //Position et taille par défaut du rectangle interne
+    innerRect->x = x + w * 0.25f;
+    innerRect->y = y + h * 0.25f;
+    innerRect->w = w * 0.5f;
+    innerRect->h = h * 0.5f;
+
+    //On trouve la direction dans laquelle on oriente le carré blanc (vitre de la voiture)
+    if (Map[i][j+1] == c){   //droite
+        innerRect->w = w * 0.8f;
+    } else if (Map[i][j-1] == c){ //gauche
+        innerRect->x = x;
+        innerRect->w = w * 0.75f;
+    } else if (Map[i-1][j] == c){ //haut
+        innerRect->y = y;
+        innerRect->h = h * 0.75f;
+    } else if (Map[i+1][j] == c){ //bas
+        innerRect->h = h * 0.8f;
+    }
+}
+
+void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows, int nb_cols, SDL_Rect rect) {
 
     float cellW = (float)rect.w / nb_cols;
     float cellH = (float)rect.h / nb_rows;
-
     
+    SDL_FRect innerRect;   //variable pour definir la taille et la position des rectangles internes
+
         for (int i = 0; i < nb_rows; i++) {
             for (int j = 0; j < nb_cols; j++) {
                 char c = Map[i][j];
@@ -63,16 +90,36 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
                                         cell.x + cellW, cell.y + cellH / 2);
                     break;
                 case 'G':   //green
-                    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-                    SDL_RenderFillRectF(renderer, &cell);
+                    afficherRect(renderer, &cell, 0, 255, 0);
+                    break;
+                case 'g': //green with middle white rectangle
+                    afficherRect(renderer, &cell, 0, 255, 0);
+                    setInnerRect(&innerRect, 'g', Map, i, j, cell.x, cell.y, cellW, cellH);
+                    afficherRect(renderer, &innerRect, 255, 255, 255);
                     break;
                 case 'R':   //red
-                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                    SDL_RenderFillRectF(renderer, &cell);
+                    afficherRect(renderer, &cell, 255, 0, 0);
+                    break;
+                case 'r': //red with middle white rectangle
+                    afficherRect(renderer, &cell, 255, 0, 0);
+                    setInnerRect(&innerRect, 'r', Map, i, j, cell.x, cell.y, cellW, cellH);
+                    afficherRect(renderer, &innerRect, 255, 255, 255);
                     break;
                 case 'B':   //blue
-                    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                    SDL_RenderFillRectF(renderer, &cell);
+                    afficherRect(renderer, &cell, 0, 0, 255);
+                    break;
+                case 'b': //blue with middle white rectangle
+                    afficherRect(renderer, &cell, 0, 0, 255);
+                    setInnerRect(&innerRect, 'b', Map, i, j, cell.x, cell.y, cellW, cellH);
+                    afficherRect(renderer, &innerRect, 255, 255, 255);
+                    break;
+                case 'Y':   //Yellow
+                    afficherRect(renderer, &cell, 255, 255, 0);
+                    break;
+                case 'y': //yellow with middle white rectangle
+                    afficherRect(renderer, &cell, 255, 255, 0);
+                    setInnerRect(&innerRect, 'y', Map, i, j, cell.x, cell.y, cellW, cellH);
+                    afficherRect(renderer, &innerRect, 255, 255, 255);
                     break;
                 default:    // espace ou autre caractère non géré
                     break;
