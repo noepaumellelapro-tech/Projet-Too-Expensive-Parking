@@ -67,10 +67,10 @@ void alignement_ligne(Vehicule *v){
                     if(v->place == 1+i || v->place == 11+i || v->place == 20+i || v->place == 29+i || v->place == 38+i || v->place == 47+i || v->place == 56+i || v->place == 66+i){
                         if(v->x-1 == 12+j){
                             if(v->place == 1+i || v->place == 20+i || v->place == 38+i || v->place == 56+i){
-                                v->direction = 'E';
+                                v->direction = 'O';
                             }
                             else{
-                                v->direction = 'O';
+                                v->direction = 'E';
                             }
                         }
                         v->x -= 1;
