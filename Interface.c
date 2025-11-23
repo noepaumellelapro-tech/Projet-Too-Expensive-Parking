@@ -120,7 +120,6 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
                     afficherRect(renderer, &cell, 255, 255, 0);
                     setInnerRect(&innerRect, 'y', Map, i, j, cell.x, cell.y, cellW, cellH);
                     afficherRect(renderer, &innerRect, 255, 255, 255);
-                    break;
                 default:    // espace ou autre caractère non géré
                     break;
             }
