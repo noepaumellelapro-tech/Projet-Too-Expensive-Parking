@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "random.h"
 #include "vehicule.h"
 #include <stdio.h>
@@ -7,7 +8,9 @@ void random_car(Vehicule **liste, int places[76]) {
 
 
     int place = random_place(places); // Génère une place de parquing aléatoiremen
+    printf("Place attribuée: %d\n", place);
 
+    
     int couleurs         = rand() % 5; 
     int vitesse          = rand() % 5; 
     char type            = (rand() % 2)  ? 'C' : 'V'; // C pour voiture, V pour camion
