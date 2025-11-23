@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "vehicule.h"
 #include "mouvement.h"
+#include "random.h"
 
 //créé une fenetre SDL
 SDL_Window* SDLCreateWindow(){
@@ -165,12 +166,10 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     rect.x = (screenW - rect.w) / 2 ;
     rect.y = (screenH - rect.h) / 2;
 
-    //A retirer
-    Vehicule* v = listeVehicules;
-
     // Boucle principale
     SDL_Event event;
     bool quit = false;
+    int spawn_compteur = 0;
     while (!quit) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) quit = true;
@@ -185,11 +184,27 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_RenderDrawRect(renderer, &rect);
         
         //Vehicule sur la map
-        SDL_Delay(100);
+        SDL_Delay(50);
+
+        //Permet de faire spawn des voitures toutes les 5 secondes
+        
+        spawn_compteur++;
+            if (spawn_compteur >= 20) {  // toutes les  environ toutes les 5secondess
+
+                if (rand() % 100 < 50) { //40% de chance de spown
+                    random_car(&listeVehicules);
+                }
+
+                spawn_compteur = 0;
+            }
+
+
         supprimervehiculeMap(Map,listeVehicules);
         //A changer par une fonction de deplacement des vehicules
-        mouvement_vehicules(v);
-        
+        mouvement_vehicules(listeVehicules);
+
+        supprimervoitureliste(&listeVehicules);
+
         ajoutervehiculeMap(Map, listeVehicules);
 
         DessinMap(renderer, Map, nbRows, nbCols, rect);

@@ -6,7 +6,7 @@
 
 // fonction qui permet de créer un vehicule et
 Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, char alignement, 
-    char type, char etat, unsigned long int tps, char symbole[2][3], int place) {
+    char type, char etat, int tps, int temps_gare, int pas_parking, char symbole[2][3], int place) {
         
         Vehicule* v = (Vehicule*)malloc(sizeof(Vehicule));
         static unsigned int next_id = 1; // Variable statique pour générer des IDs uniques
@@ -29,6 +29,8 @@ Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, 
         v->type = type;
         v->etat = etat;
         v->tps = tps;
+        v->temps_gare = temps_gare;
+        v->pas_parking = pas_parking;
         v->place = place;
         
         
@@ -70,54 +72,31 @@ Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, 
     
     
     // Fonction qui permet de supprimer une voiture de la liste
-    int supprimervoitureliste(Vehicule **liste, unsigned int id) {
+    int supprimervoitureliste(Vehicule **liste) {
         
         Vehicule *precedent = NULL;
         Vehicule *courant = *liste;
         
-        while (courant && courant->id != id) { // Parcourt la liste jusqu'à trouver la voiture avec l'ID donné
-            precedent = courant;    // Sauvegarde le véhicule précédent
-            courant   = courant->suivant; // Tranfere le pointeur au suivant
-        }
-        
-        if (precedent == NULL) { // Si la voiture à supprimer est la première de la liste
-            *liste = courant->suivant; // Met à jour la tête de liste
-        } else {
-            precedent->suivant = courant->suivant; // Saute le véhicule à supprimer
-        }
-        
-        detruireVehicule(courant);
-        return 1;
-    }
-    
-    // Fonction qui permet d'afficher une voiture
-    void afficherVehicule(Vehicule *v) {
-    
-        printf("ID: %u\n", v->id);
-        printf("Position: (%d, %d)\n", v->x, v->y);
-        printf("Direction: %c\n", v->direction);
-        printf("Vitesse: %d\n", v->vitesse);
-        printf("Couleur: %d\n", v->couleur);
-        printf("Alignement: %c\n", v->alignement);
-        printf("Type: %c\n", v->type);
-        printf("État: %c\n", v->etat);
-        printf("Temps sur le parking: %lu\n", v->tps);
-        printf("Symbole:");
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 3; j++) {
-                printf("%c ", v->symbole[i][j]);
-            }
-            printf("\n");
-        }
-    }
-
-    // Fonction qui permet d'afficher la liste chainee des voitures
-    void afficherliste(Vehicule *liste) {
-        Vehicule *courant = liste;
         while (courant != NULL) {
-            afficherVehicule(courant);
+        if (courant->etat == 'F') {
+            Vehicule *suppression = courant;
+
+            if (precedent == NULL) {
+                *liste = courant->suivant;
+                courant = *liste;
+            } else {
+                precedent->suivant = courant->suivant;
+                courant = courant->suivant;
+            }
+            
+            detruireVehicule(suppression);
+
+        } else {
+            precedent = courant;
             courant = courant->suivant;
         }
+    }
+    return 1; // succès
     }
 
     // qui permet de supprimer toutes les voitures de la liste

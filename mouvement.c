@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mouvement.h"
+#include "random.h"
 
 void alignement_colonne(Vehicule *v){
     //on va s'aligner a sa place (etape 1)
@@ -23,7 +24,7 @@ void alignement_colonne(Vehicule *v){
                 }
                 v->y -=1;
             }//colone 4
-            else if(v->place <= 56){
+             else if(v->place >= 56){
                 if(v->y -1 == 130){
                     v->direction = 'N';
                 }
@@ -37,10 +38,14 @@ void alignement_ligne(Vehicule *v){
             if (v->place == 0 || v->place == 65 ){
                 if(v->x -1 == 7){
                     if(v->place == 0){
-                        v->direction = 'E';
+                        v->direction = 'O';
+                        v->pas_parking = 18;
+                        v->etat = 'G';
                     }
                     else{
-                        v->direction = 'O';
+                        v->direction = 'E';
+                        v->pas_parking = 5;
+                        v->etat = 'G';
                     }
                 }
                 v->x -= 1;
@@ -49,10 +54,15 @@ void alignement_ligne(Vehicule *v){
             else if (v->place == 10 || v->place == 75 ){
                 if(v->x -1 == 57){
                     if(v->place == 10){
-                        v->direction = 'E';
+                        v->direction = 'O';
+                        v->pas_parking = 18;
+                        v->etat = 'G';
                     }
                     else{
-                        v->direction = 'O';
+                        v->direction = 'E';
+                        v->pas_parking = 5;
+                        v->etat = 'G';
+                        
                     }
                 }
                 v->x -= 1;
@@ -67,10 +77,15 @@ void alignement_ligne(Vehicule *v){
                     if(v->place == 1+i || v->place == 11+i || v->place == 20+i || v->place == 29+i || v->place == 38+i || v->place == 47+i || v->place == 56+i || v->place == 66+i){
                         if(v->x-1 == 12+j){
                             if(v->place == 1+i || v->place == 20+i || v->place == 38+i || v->place == 56+i){
-                                v->direction = 'E';
+                                v->direction = 'O';
+                                v->pas_parking = 18; //18 pas pour se garer
+                                v->etat = 'G'; //mettre en etat garer
                             }
                             else{
-                                v->direction = 'O';
+                                v->direction = 'E';
+                                v->pas_parking = 5; //5 pas pour se garer
+                                v->etat = 'G'; //mettre en etat garer
+
                             }
                         }
                         v->x -= 1;
@@ -87,9 +102,9 @@ void alignement_ligne(Vehicule *v){
 
 void mouvement_vehicules(Vehicule *listeVehicules) {
     Vehicule* v = listeVehicules;
-
+// Parcours de la liste des véhicules
     while (v != NULL) {
-        if (v->etat == 'M') { // Si le véhicule est en mouvement
+        if (v->etat == 'M') { 
 
             if(v->direction == 'O'){
                 alignement_colonne(v);
@@ -97,12 +112,97 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
             else if(v->direction == 'N'){
                 alignement_ligne(v);
             }
-
-            
-
-            
-
         }
-        v = v->suivant; // Passe au véhicule suivant
+
+//Si la voiture est entrain de se garer
+        if (v->etat == 'G') { 
+
+            if (v->direction == 'O') {
+                if (v->pas_parking > 0) {
+                    v->y -= 1;
+                    v->pas_parking--;
+                } else {
+                    v->etat = 'A';     
+                    v->temps_gare = 0;
+                }
+            }
+
+              if (v->direction == 'E') {
+                if (v->pas_parking > 0) {
+                    v->y += 1;
+                    v->pas_parking--;
+                } else {
+                    v->etat = 'A';
+                    v->temps_gare = 0;
+            }
+        }
+    }
+
+    // Si la voiture est entrain d'entrer dans sa place de parking
+        if (v->etat == 'A') {
+            v->temps_gare++;
+            if (v->temps_gare >= v->tps  * 10) {
+                v->etat = 'R';
+                if(v->direction == 'O'){
+                    v->pas_parking = 7;
+                }
+                else if(v->direction == 'E'){
+                    v->pas_parking = 5;
+                }
+            }
+        }
+        
+// Si la voiture est en train de quiiter sa place de parking
+        if(v->etat =='R')
+         {
+
+            if (v->direction == 'O') {
+                if (v->pas_parking > 0) {
+                    v->y += 1;
+                    v->pas_parking--;
+                } else {
+                    v->etat = 'S';     
+                    liberer_place(v->place);
+                    v->temps_gare = 0;
+                }
+            }
+
+              if (v->direction == 'E') {
+                if (v->pas_parking > 0) {
+                    v->y -= 1;
+                    v->pas_parking--;
+                } else {
+                    v->etat = 'S';
+                   liberer_place(v->place);
+                    v->temps_gare = 0;
+            }
+        }
+
+
+         }
+
+// Si la voiture est en train de quitter le parking
+         if (v->etat == 'S') {
+            int EXIT_X = 1; 
+            int EXIT_Y = 0;
+
+           
+                if (v->x > EXIT_X) {
+                    v->direction = 'N';  
+                    v->x--;              
+                }
+
+                else if (v->y > EXIT_Y) {
+                    v->direction = 'O';  
+                    v->y--;             
+                }
+
+            if (v->x == EXIT_X && v->y == EXIT_Y) {
+                v->etat = 'F';  
+            }
+        }
+
+
+        v = v->suivant;
     }
 }

@@ -4,13 +4,16 @@
 #include "vehicule.h"
 #include <stdio.h>
 
-void random_car(Vehicule **liste, int places[76]) {
+static int places[76] = {0}; // Tableau pour gérer les places de parking (0 = libre, 1 = occupée)
+
+
+void random_car(Vehicule **liste) {
 
 
     int place = random_place(places); // Génère une place de parquing aléatoiremen
     printf("Place attribuée: %d\n", place);
 
-    
+    int temps            = rand() % 30 ;
     int couleurs         = rand() % 5; 
     int vitesse          = rand() % 5; 
     char type            = (rand() % 2)  ? 'C' : 'V'; // C pour voiture, V pour camion
@@ -19,7 +22,7 @@ void random_car(Vehicule **liste, int places[76]) {
     char t[2][3];
     randomCarModel(t);
 
-    Vehicule *v = creerVehicule(63, 137, 'O', vitesse, couleurs, alignement, type, 'M', 0, t, place);
+    Vehicule *v = creerVehicule(63, 137, 'O', vitesse, couleurs, alignement, type, 'M', temps, 0, 0, t, place);
     ajoutervehicule(liste, v);
 
 }
@@ -36,6 +39,13 @@ int random_place(int places[76]) {
 
     return place;
 }
+
+void liberer_place(int place) {
+    if (place >= 0 && place < 76) {
+        places[place] = 0;
+    }
+}
+
 void randomCarModel(char voiture[2][3]) {
     int NbLignes = 0;
     
