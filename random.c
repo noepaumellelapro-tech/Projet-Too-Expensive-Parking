@@ -9,9 +9,16 @@ static int places[76] = {0}; // Tableau pour gérer les places de parking (0 = l
 
 void random_car(Vehicule **liste) {
 
-    if(places[75] == 1) {
-        printf("Parking plein, impossible de spawner une nouvelle voiture.\n");
-        return; // Parking plein
+    int placesoccupee = 0;
+
+    for(int i = 0; i < 76; i++) {
+        if(places[i] == 1) {
+            placesoccupee++;
+        }
+    }
+    if(placesoccupee >= 76) {
+        printf("Parking plein, impossible de créer une nouvelle voiture.\n");
+        return;
     }
 
     int place = random_place(places); // Génère une place de parquing aléatoiremen
