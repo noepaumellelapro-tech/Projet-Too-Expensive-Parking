@@ -102,6 +102,7 @@ void alignement_ligne(Vehicule *v){
 
 void mouvement_vehicules(Vehicule *listeVehicules) {
     Vehicule* v = listeVehicules;
+    
 // Parcours de la liste des véhicules
     while (v != NULL) {
         if (v->etat == 'M') { 

@@ -184,14 +184,14 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_RenderDrawRect(renderer, &rect);
         
         //Vehicule sur la map
-        SDL_Delay(5);
+        SDL_Delay(0);
 
         //Permet de faire spawn des voitures toutes les 5 secondes
         
         spawn_compteur++;
             if (spawn_compteur >= 20) {  // toutes les  environ toutes les 5secondess
 
-                if (rand() % 100 < 70) { //40% de chance de spown
+                if (rand() % 100 < 70) { //70% de chance de spown
                     random_car(&listeVehicules);
                 }
 
@@ -229,7 +229,7 @@ int ajoutervehiculeMap(char Map[MAX_ROWS][MAX_COLS], Vehicule* listeVehicules){
             for (int n = 0; n < 3 - carUpBool ; n++) {
                 if (Map[v->x + m][v->y + n] != ' '){
                     printf("le vehicule avec l'id %d ne peut pas etre placé sur la map\n", v->id);
-                    return 0; // échec a cause d'un vehicule dans un mur
+                    continue; // échec a cause d'un vehicule dans un mur / autre vehicule
                 }
 
                 switch (v->direction) //Permet de mettre la voiture dans la bonne direction
