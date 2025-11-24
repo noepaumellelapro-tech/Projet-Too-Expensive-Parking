@@ -102,14 +102,15 @@ void alignement_ligne(Vehicule *v){
 
 void mouvement_vehicules(Vehicule *listeVehicules) {
     Vehicule* v = listeVehicules;
+
 // Parcours de la liste des véhicules
     while (v != NULL) {
         if (v->etat == 'M') { 
 
-            if(v->direction == 'O'){
+            if(v->direction == 'O' && checkCollisionVoiture(listeVehicules, v, 'O') == 0){
                 alignement_colonne(v);
             }
-            else if(v->direction == 'N'){
+            else if(v->direction == 'N' && checkCollisionVoiture(listeVehicules, v, 'N') == 0){
                 alignement_ligne(v);
             }
         }
@@ -117,7 +118,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
 //Si la voiture est entrain de se garer
         if (v->etat == 'G') { 
 
-            if (v->direction == 'O') {
+            if (v->direction == 'O' && checkCollisionVoiture(listeVehicules, v, 'O') == 0) {
                 if (v->pas_parking > 0) {
                     v->y -= 1;
                     v->pas_parking--;
@@ -127,7 +128,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
                 }
             }
 
-              if (v->direction == 'E') {
+            if (v->direction == 'E' && checkCollisionVoiture(listeVehicules, v, 'E') == 0) {
                 if (v->pas_parking > 0) {
                     v->y += 1;
                     v->pas_parking--;
@@ -141,7 +142,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
     // Si la voiture est entrain d'entrer dans sa place de parking
         if (v->etat == 'A') {
             v->temps_gare++;
-            if (v->temps_gare >= v->tps  * 10) {
+            if (v->temps_gare >= v->tps * 10) {
                 v->etat = 'R';
                 if(v->direction == 'O'){
                     v->pas_parking = 7;
@@ -156,7 +157,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
         if(v->etat =='R')
          {
 
-            if (v->direction == 'O') {
+            if (v->direction == 'O' && checkCollisionVoiture(listeVehicules, v, 'E') == 0) {
                 if (v->pas_parking > 0) {
                     v->y += 1;
                     v->pas_parking--;
@@ -167,7 +168,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
                 }
             }
 
-              if (v->direction == 'E') {
+              if (v->direction == 'E' && checkCollisionVoiture(listeVehicules, v, 'O') == 0) {
                 if (v->pas_parking > 0) {
                     v->y -= 1;
                     v->pas_parking--;
@@ -189,12 +190,14 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
            
                 if (v->x > EXIT_X) {
                     v->direction = 'N';  
-                    v->x--;              
+                    if (checkCollisionVoiture(listeVehicules, v, 'N') == 0)
+                        v->x--;              
                 }
 
                 else if (v->y > EXIT_Y) {
-                    v->direction = 'O';  
-                    v->y--;             
+                    v->direction = 'O';
+                    if (checkCollisionVoiture(listeVehicules, v, 'O') == 0)  
+                        v->y--;             
                 }
 
             if (v->x == EXIT_X && v->y == EXIT_Y) {
@@ -205,4 +208,55 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
 
         v = v->suivant;
     }
+}
+
+int checkCollisionVoiture(Vehicule *listeVehicules, Vehicule *voitureAverif, char DirMouvement) {   //Retourne 1 si il y'a une collision potentielle au prochain mouvement, 0 sinon
+    Vehicule* v = listeVehicules;
+
+    int tmpX1 = voitureAverif->x;
+    int tmpY1 = voitureAverif->y;
+
+    switch (DirMouvement) {
+        case 'N':
+        tmpY1--;
+        break;
+        case 'S':
+        tmpY1++;
+        break;
+        case 'E':
+        tmpX1++;
+        break;
+        case 'O':
+        tmpX1--;
+        break;
+    }
+    
+    int tmpX2 = tmpX1 + 2 + ((voitureAverif->direction == 'N' || voitureAverif->direction == 'S') ? 1 : 0);
+    int tmpY2 = tmpY1 + 2 + ((voitureAverif->direction == 'N' || voitureAverif->direction == 'S') ? 0 : 1);
+    
+    int Bx1;
+    int By1;
+    int Bx2;
+    int By2;
+
+    while (v != NULL) {
+        if (v->id != voitureAverif->id) {
+            // Vérification qu'aucune voiture ne se trouve au moin 2 cases autour de la voitureAverifier
+            
+            Bx1 = v->x;
+            By1 = v->y;
+            Bx2 = v->x + 2 + ((v->direction == 'N' || v->direction == 'S') ? 1 : 0);
+            By2 = v->y + 2 + ((v->direction == 'N' || v->direction == 'S') ? 0 : 1);
+            
+            if (tmpX1 <= Bx2+1 && tmpX2 >= Bx1-1 && tmpY1 <= By2+1 && tmpY2 >= By1-1) {
+                return 1; // Collision détectée
+            }
+            /**if (tmpY <= v->y+5 && tmpY >= v->y-2 && tmpX <= v->x+5 && tmpX >= v->x-2) {
+                return 1; // Collision détectée
+            }*/
+        }
+        v = v->suivant;
+    }
+    return 0; // Pas de collision
+
 }
