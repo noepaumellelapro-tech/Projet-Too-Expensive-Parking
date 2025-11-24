@@ -184,14 +184,14 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_RenderDrawRect(renderer, &rect);
         
         //Vehicule sur la map
-        SDL_Delay(50);
+        SDL_Delay(5);
 
         //Permet de faire spawn des voitures toutes les 5 secondes
         
         spawn_compteur++;
             if (spawn_compteur >= 20) {  // toutes les  environ toutes les 5secondess
 
-                if (rand() % 100 < 50) { //40% de chance de spown
+                if (rand() % 100 < 70) { //40% de chance de spown
                     random_car(&listeVehicules);
                 }
 
