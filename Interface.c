@@ -5,6 +5,92 @@
 #include "mouvement.h"
 #include "random.h"
 
+static SDL_Surface* createFallbackCarSurface(void) {
+    const int texW = 120;
+    const int texH = 80;
+    SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormat(0, texW, texH, 32, SDL_PIXELFORMAT_RGBA32);
+    if (!surface) return NULL;
+
+    // Couleur de base (gris clair) et détails simples
+    SDL_FillRect(surface, NULL, SDL_MapRGBA(surface->format, 200, 200, 200, 255));
+    SDL_Rect cabine = { texW / 4, texH / 5, texW / 2, (texH * 3) / 5 };
+    SDL_FillRect(surface, &cabine, SDL_MapRGBA(surface->format, 240, 240, 240, 255));
+
+    SDL_Rect vitre = { texW / 3, texH / 4, texW / 3, texH / 2 };
+    SDL_FillRect(surface, &vitre, SDL_MapRGBA(surface->format, 30, 30, 40, 220));
+
+    SDL_Rect phareAvant = { texW - 12, texH / 3, 10, texH / 6 };
+    SDL_Rect phareArriere = { 2, texH / 3, 10, texH / 6 };
+    SDL_FillRect(surface, &phareAvant, SDL_MapRGBA(surface->format, 255, 230, 120, 255));
+    SDL_FillRect(surface, &phareArriere, SDL_MapRGBA(surface->format, 200, 40, 40, 255));
+
+    SDL_Rect roue1 = { texW / 6, texH / 12, texW / 5, texH / 6 };
+    SDL_Rect roue2 = { texW / 6, texH - texH / 4, texW / 5, texH / 6 };
+    SDL_Rect roue3 = { texW - texW / 3, texH / 12, texW / 5, texH / 6 };
+    SDL_Rect roue4 = { texW - texW / 3, texH - texH / 4, texW / 5, texH / 6 };
+    Uint32 pneu = SDL_MapRGBA(surface->format, 25, 25, 25, 255);
+    SDL_FillRect(surface, &roue1, pneu);
+    SDL_FillRect(surface, &roue2, pneu);
+    SDL_FillRect(surface, &roue3, pneu);
+    SDL_FillRect(surface, &roue4, pneu);
+
+    return surface;
+}
+
+static SDL_Texture* createCarTexture(SDL_Renderer* renderer) {
+    const char* path = "assets/car.bmp";
+    SDL_Surface* surface = SDL_LoadBMP(path);
+    if (!surface) {
+        SDL_Log("Impossible de charger %s (%s), utilisation d'une texture fallback.", path, SDL_GetError());
+        surface = createFallbackCarSurface();
+    }
+    if (!surface) return NULL;
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    if (!texture) return NULL;
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+    return texture;
+}
+
+static void colorForVehicle(int code, Uint8* r, Uint8* g, Uint8* b) {
+    switch (code % 5) {
+        case 0: *r = 200; *g = 40;  *b = 40;  break; // rouge
+        case 1: *r = 40;  *g = 180; *b = 60;  break; // vert
+        case 2: *r = 40;  *g = 90;  *b = 200; break; // bleu
+        case 3: *r = 230; *g = 200; *b = 30;  break; // jaune
+        default:*r = 190; *g = 190; *b = 190; break; // gris
+    }
+}
+
+static void drawCars(SDL_Renderer* renderer, Vehicule* listeVehicules, SDL_Rect mapRect, float cellSize, SDL_Texture* carTexture) {
+    if (!carTexture) return;
+
+    for (Vehicule* v = listeVehicules; v != NULL; v = v->suivant) {
+        int vertical = (v->direction == 'N' || v->direction == 'S');
+        SDL_FRect dst = {
+            mapRect.x + v->y * cellSize,
+            mapRect.y + v->x * cellSize,
+            vertical ? 2 * cellSize : 3 * cellSize,
+            vertical ? 3 * cellSize : 2 * cellSize
+        };
+
+        double angle = 0.0;
+        switch (v->direction) {
+            case 'N': angle = -90.0; break;
+            case 'E': angle = 0.0;   break;
+            case 'S': angle = 90.0;  break;
+            case 'O': angle = 180.0; break;
+            default: break;
+        }
+
+        Uint8 r, g, b;
+        colorForVehicle(v->couleur, &r, &g, &b);
+        SDL_SetTextureColorMod(carTexture, r, g, b);
+        SDL_RenderCopyExF(renderer, carTexture, NULL, &dst, angle, NULL, SDL_FLIP_NONE);
+    }
+}
+
 //créé une fenetre SDL
 SDL_Window* SDLCreateWindow(){
 
@@ -138,6 +224,12 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     SDL_Window* window = SDLCreateWindow();
 
     read_map(nomFichier, Map, nb_rows, nb_cols);
+    char baseMap[MAX_ROWS][MAX_COLS];
+    for (int i = 0; i < *nb_rows; i++) {
+        for (int j = 0; j < *nb_cols; j++) {
+            baseMap[i][j] = Map[i][j];
+        }
+    }
 
     // Création du renderer
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -166,6 +258,8 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     rect.x = (screenW - rect.w) / 2 ;
     rect.y = (screenH - rect.h) / 2;
 
+    SDL_Texture* carTexture = createCarTexture(renderer);
+
     // Boucle principale
     SDL_Event event;
     bool quit = false;
@@ -184,7 +278,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_RenderDrawRect(renderer, &rect);
         
         //Vehicule sur la map
-        SDL_Delay(5);
+        SDL_Delay(10);
 
         //Permet de faire spawn des voitures toutes les 5 secondes
         
@@ -207,11 +301,15 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
 
         ajoutervehiculeMap(Map, listeVehicules);
 
-        DessinMap(renderer, Map, nbRows, nbCols, rect);
+        DessinMap(renderer, baseMap, nbRows, nbCols, rect);
+        drawCars(renderer, listeVehicules, rect, CELL_SIZE, carTexture);
 
         SDL_RenderPresent(renderer);
     }
 
+    if (carTexture) {
+        SDL_DestroyTexture(carTexture);
+    }
     SDLDestroyWindow(window, renderer);
     return 0;
 }
