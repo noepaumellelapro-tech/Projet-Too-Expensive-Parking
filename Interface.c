@@ -273,6 +273,10 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
+        // Fond de la zone carte en gris béton
+        SDL_SetRenderDrawColor(renderer, 95, 95, 95, 255);
+        SDL_RenderFillRect(renderer, &rect);
+
         // Rectangle blanc
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderDrawRect(renderer, &rect);
