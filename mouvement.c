@@ -218,16 +218,16 @@ int checkCollisionVoiture(Vehicule *listeVehicules, Vehicule *voitureAverif, cha
 
     switch (DirMouvement) {
         case 'N':
-        tmpY1--;
+        tmpX1--;
         break;
         case 'S':
-        tmpY1++;
-        break;
-        case 'E':
         tmpX1++;
         break;
+        case 'E':
+        tmpY1++;
+        break;
         case 'O':
-        tmpX1--;
+        tmpY1--;
         break;
     }
     
