@@ -66,14 +66,27 @@ static void colorForVehicle(int code, Uint8* r, Uint8* g, Uint8* b) {
 static void drawCars(SDL_Renderer* renderer, Vehicule* listeVehicules, SDL_Rect mapRect, float cellSize, SDL_Texture* carTexture) {
     if (!carTexture) return;
 
+    static int texW = 0;
+    static int texH = 0;
+    if (texW == 0 || texH == 0) {
+        SDL_QueryTexture(carTexture, NULL, NULL, &texW, &texH);
+        if (texW == 0 || texH == 0) return;
+    }
+
+    float longSize = 3.0f * cellSize;       // longueur commune
+    float horizShort = 2.0f * cellSize;     // hauteur quand horizontale
+    float vertNarrow = 2.2f * cellSize;     // largeur plus fine quand verticale (plus épaisse)
+    float vertLong = 3.2f * cellSize;       // longueur légèrement augmentée pour le vertical
+
     for (Vehicule* v = listeVehicules; v != NULL; v = v->suivant) {
         int vertical = (v->direction == 'N' || v->direction == 'S');
-        SDL_FRect dst = {
-            mapRect.x + v->y * cellSize,
-            mapRect.y + v->x * cellSize,
-            vertical ? 2 * cellSize : 3 * cellSize,
-            vertical ? 3 * cellSize : 2 * cellSize
-        };
+
+        SDL_FRect dst;
+        dst.x = mapRect.x + v->y * cellSize;
+        dst.y = mapRect.y + v->x * cellSize;
+        // Pour les voitures verticales, on inverse les proportions (longueur sur l'axe X, largeur sur Y après rotation)
+        dst.w = vertical ? vertLong : longSize;
+        dst.h = vertical ? vertNarrow : horizShort;
 
         double angle = 0.0;
         switch (v->direction) {
@@ -282,7 +295,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_RenderDrawRect(renderer, &rect);
         
         //Vehicule sur la map
-        SDL_Delay(10);
+        SDL_Delay(100);
 
         //Permet de faire spawn des voitures toutes les 5 secondes
         
