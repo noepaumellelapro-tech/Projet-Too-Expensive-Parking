@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "mouvement.h"
 #include "random.h"
-
+#include "ticketing.h"
 void alignement_colonne(Vehicule *v){
     //on va s'aligner a sa place (etape 1)
             //collone 1
@@ -201,6 +201,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
                 }
 
             if (v->x == EXIT_X && v->y == EXIT_Y) {
+                float tarif = calculer_tarif(v);
                 v->etat = 'F';  
             }
         }

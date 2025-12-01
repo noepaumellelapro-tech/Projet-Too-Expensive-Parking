@@ -295,7 +295,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_RenderDrawRect(renderer, &rect);
         
         //Vehicule sur la map
-        SDL_Delay(100);
+        SDL_Delay(20);
 
         //Permet de faire spawn des voitures toutes les 5 secondes
         
