@@ -100,7 +100,7 @@ void alignement_ligne(Vehicule *v){
     }
            
 
-void mouvement_vehicules(Vehicule *listeVehicules) {
+void mouvement_vehicules(Vehicule *listeVehicules, char Map[MAX_ROWS][MAX_COLS]) {
     Vehicule* v = listeVehicules;
 
 // Parcours de la liste des véhicules
@@ -123,6 +123,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
                     v->y -= 1;
                     v->pas_parking--;
                 } else {
+                    changer_etat_place(v, 'R', Map);
                     v->etat = 'A';     
                     v->temps_gare = 0;
                 }
@@ -133,6 +134,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
                     v->y += 1;
                     v->pas_parking--;
                 } else {
+                    changer_etat_place(v, 'R', Map);
                     v->etat = 'A';
                     v->temps_gare = 0;
             }
@@ -143,6 +145,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
         if (v->etat == 'A') {
             v->temps_gare++;
             if (v->temps_gare >= v->tps * 10) {
+                changer_etat_place(v, 'G', Map);
                 v->etat = 'R';
                 if(v->direction == 'O'){
                     v->pas_parking = 7;
@@ -260,4 +263,21 @@ int checkCollisionVoiture(Vehicule *listeVehicules, Vehicule *voitureAverif, cha
     }
     return 0; // Pas de collision
 
+}
+
+void changer_etat_place(Vehicule *v, char Etat, char Map[MAX_ROWS][MAX_COLS]){
+    int posy = v->y;
+    switch (v->direction)
+    {
+        case 'O':
+            posy-=4;
+            break;
+        case 'E':
+            posy+=6;
+            break;
+    }
+    
+    for (int i = v->x-1; i<v->x+3; i++){
+        Map[i][posy] = Etat;
+    }
 }

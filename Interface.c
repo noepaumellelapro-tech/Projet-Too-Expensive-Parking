@@ -237,12 +237,6 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     SDL_Window* window = SDLCreateWindow();
 
     read_map(nomFichier, Map, nb_rows, nb_cols);
-    char baseMap[MAX_ROWS][MAX_COLS];
-    for (int i = 0; i < *nb_rows; i++) {
-        for (int j = 0; j < *nb_cols; j++) {
-            baseMap[i][j] = Map[i][j];
-        }
-    }
 
     // Création du renderer
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -312,13 +306,13 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
 
         supprimervehiculeMap(Map,listeVehicules);
         //A changer par une fonction de deplacement des vehicules
-        mouvement_vehicules(listeVehicules);
+        mouvement_vehicules(listeVehicules, Map);
 
         supprimervoitureliste(&listeVehicules);
 
         ajoutervehiculeMap(Map, listeVehicules);
 
-        DessinMap(renderer, baseMap, nbRows, nbCols, rect);
+        DessinMap(renderer, Map, nbRows, nbCols, rect);
         drawCars(renderer, listeVehicules, rect, CELL_SIZE, carTexture);
 
         SDL_RenderPresent(renderer);
