@@ -1,4 +1,4 @@
 *.exe
 .vscode/
-Interface.o
+*.o
 parking

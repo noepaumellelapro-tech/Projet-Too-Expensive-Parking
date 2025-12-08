@@ -25,7 +25,7 @@ void random_car(Vehicule **liste) {
 
     printf("Place attribuée: %d\n", place);
 
-    int temps            = rand() % 500 ;
+    int temps            = rand() % 600;
     int couleurs         = rand() % 5; 
     int vitesse          = rand() % 5; 
     char type            = (rand() % 2)  ? 'C' : 'V'; // C pour voiture, V pour camion
