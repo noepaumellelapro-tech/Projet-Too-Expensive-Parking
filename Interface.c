@@ -304,13 +304,9 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
             }
 
 
-        supprimervehiculeMap(Map,listeVehicules);
-        //A changer par une fonction de deplacement des vehicules
         mouvement_vehicules(listeVehicules, Map);
 
         supprimervoitureliste(&listeVehicules);
-
-        ajoutervehiculeMap(Map, listeVehicules);
 
         DessinMap(renderer, Map, nbRows, nbCols, rect);
         drawCars(renderer, listeVehicules, rect, CELL_SIZE, carTexture);
@@ -323,65 +319,6 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     }
     SDLDestroyWindow(window, renderer);
     return 0;
-}
-
-
-int ajoutervehiculeMap(char Map[MAX_ROWS][MAX_COLS], Vehicule* listeVehicules){
-    // Ajout des vehicules sur la map
-    while (listeVehicules != NULL) {
-        Vehicule* v = listeVehicules;
-
-        int carUpBool = (v->direction == 'N' || v->direction == 'S') ? 1 : 0;
-
-        //test si le vehicules peut etre placé sur la map ou il se trouve dans un mur
-        for (int m = 0; m < 2 + carUpBool ; m++) {
-            for (int n = 0; n < 3 - carUpBool ; n++) {
-                if (Map[v->x + m][v->y + n] != ' '){
-                    printf("le vehicule avec l'id %d ne peut pas etre placé sur la map\n", v->id);
-                    continue; // échec a cause d'un vehicule dans un mur / autre vehicule
-                }
-
-                switch (v->direction) //Permet de mettre la voiture dans la bonne direction
-                {
-                    case 'N':
-                        Map[v->x + m][v->y + n] = v->symbole[n][m];
-                        break;
-                    case 'S':
-                        Map[v->x + m][v->y + n] = v->symbole[n][2-m];
-                        break;
-                    case 'E':
-                        Map[v->x + m][v->y + n] = v->symbole[m][2-n];
-                        break;
-                    case 'O':
-                        Map[v->x + m][v->y + n] = v->symbole[m][n];
-                        break;
-                }   
-            }
-        }
-
-        listeVehicules = v->suivant;
-    }
-    return 1; // succès
-}
-
-int supprimervehiculeMap(char Map[MAX_ROWS][MAX_COLS], Vehicule* listeVehicules) {
-
-    while (listeVehicules != NULL) {
-        Vehicule* v = listeVehicules;
-
-        int carUpBool = (v->direction == 'N' || v->direction == 'S') ? 1 : 0;
-
-        // On enlève simplement toutes les cases occupées par le véhicule
-        for (int m = 0; m < 2 + carUpBool ; m++) {
-            for (int n = 0; n < 3 - carUpBool ; n++) {
-                Map[v->x + m][v->y + n] = ' ';
-            }
-        }
-
-        listeVehicules = v->suivant;
-    }
-
-    return 1;
 }
 
 //lecture de la map depuis un fichier et affichage
