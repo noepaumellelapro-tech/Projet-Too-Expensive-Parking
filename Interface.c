@@ -231,7 +231,7 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
     
 }
 
-int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols, Vehicule* listeVehicules) {
+int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols, Vehicule* listeVehicules,int delay, int chance) {
 
 
     SDL_Window* window = SDLCreateWindow();
@@ -295,14 +295,14 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_RenderDrawRect(renderer, &rect);
         
         //Vehicule sur la map
-        SDL_Delay(24);
+        SDL_Delay(delay);
 
         //Permet de faire spawn des voitures toutes les 5 secondes
         
         spawn_compteur++;
             if (spawn_compteur >= 20) {  // toutes les  environ toutes les 5secondess
 
-                if (rand() % 100 < 70) { //70% de chance de spown
+                if (rand() % 100 < chance) { //70% de chance de spown
                     random_car(&listeVehicules);
                 }
 

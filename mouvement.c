@@ -44,7 +44,7 @@ void alignement_ligne(Vehicule *v){
                     }
                     else{
                         v->direction = 'E';
-                        v->pas_parking = 5;
+                        v->pas_parking = 6;
                         v->etat = 'G';
                     }
                 }
@@ -60,7 +60,7 @@ void alignement_ligne(Vehicule *v){
                     }
                     else{
                         v->direction = 'E';
-                        v->pas_parking = 5;
+                        v->pas_parking = 6;
                         v->etat = 'G';
                         
                     }
@@ -83,7 +83,7 @@ void alignement_ligne(Vehicule *v){
                             }
                             else{
                                 v->direction = 'E';
-                                v->pas_parking = 5; //5 pas pour se garer
+                                v->pas_parking = 6; //5 pas pour se garer
                                 v->etat = 'G'; //mettre en etat garer
 
                             }
@@ -148,7 +148,7 @@ void mouvement_vehicules(Vehicule *listeVehicules) {
                     v->pas_parking = 7;
                 }
                 else if(v->direction == 'E'){
-                    v->pas_parking = 5;
+                    v->pas_parking = 6;
                 }
             }
         }
@@ -249,7 +249,7 @@ int checkCollisionVoiture(Vehicule *listeVehicules, Vehicule *voitureAverif, cha
             Bx2 = v->x + 2 + ((v->direction == 'N' || v->direction == 'S') ? 1 : 0);
             By2 = v->y + 2 + ((v->direction == 'N' || v->direction == 'S') ? 0 : 1);
             
-            if (tmpX1 <= Bx2+1 && tmpX2 >= Bx1-1 && tmpY1 <= By2+1 && tmpY2 >= By1-1) {
+            if (tmpX1 <= Bx2+2 && tmpX2 >= Bx1-2 && tmpY1 <= By2+2 && tmpY2 >= By1-2) {
                 return 1; // Collision détectée
             }
             /**if (tmpY <= v->y+5 && tmpY >= v->y-2 && tmpX <= v->x+5 && tmpX >= v->x-2) {

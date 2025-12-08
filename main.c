@@ -1,23 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include "vehicule.h"
-#include "random.h"
-#include "Interface.h"
+
+#include "menu.h"
 
 int main(void)
 
 {   
-    srand((unsigned)time(NULL)); // Initialisation de la graine pour la génération aléatoire
-    Vehicule *liste = NULL;   //creation de la liste de vehicule
-    random_car(&liste); // Permet de générer des véhicules aléatoires et de les ajouter à la liste
-
-    char Map [MAX_ROWS][MAX_COLS];
-    int rows = 0;
-    int cols = 0;
-
-    interface("Map_1.txt", Map, &rows, &cols, liste);
-    libererliste(&liste); // Libère la mémoire allouée pour la liste des véhicules
-
-return EXIT_SUCCESS;
+    afficherMenuPrincipal();
+    return 0;
 }
