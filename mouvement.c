@@ -204,7 +204,6 @@ void mouvement_vehicules(Vehicule *listeVehicules, char Map[MAX_ROWS][MAX_COLS])
                 }
 
             if (v->x == EXIT_X && v->y == EXIT_Y) {
-                float tarif = calculer_tarif(v);
                 v->etat = 'F';  
             }
         }

@@ -4,6 +4,7 @@
 #include "vehicule.h"
 #include "mouvement.h"
 #include "random.h"
+#include "ticketing.h"
 
 static SDL_Surface* createFallbackCarSurface(void) {
     const int texW = 120;
@@ -273,7 +274,13 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     int spawn_compteur = 0;
     while (!quit) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) quit = true;
+            if (event.type == SDL_QUIT) {
+                quit = true;
+            } else if (event.type == SDL_KEYDOWN) {
+                if (event.key.keysym.sym == SDLK_q) {
+                    quit = true;
+                }
+            }
         }
 
         // Fond noir
@@ -317,6 +324,8 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     if (carTexture) {
         SDL_DestroyTexture(carTexture);
     }
+    float total = total_argent();
+    printf("Total d'argent récolté: %.2f euros\n", total);
     SDLDestroyWindow(window, renderer);
     return 0;
 }

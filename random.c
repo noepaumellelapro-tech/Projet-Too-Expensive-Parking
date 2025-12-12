@@ -17,13 +17,13 @@ void random_car(Vehicule **liste) {
         }
     }
     if(placesoccupee >= 76) {
-        printf("Parking plein, impossible de créer une nouvelle voiture.\n");
+        //printf("Parking plein, impossible de créer une nouvelle voiture.\n");
         return;
     }
 
     int place = random_place(places); // Génère une place de parquing aléatoiremen
 
-    printf("Place attribuée: %d\n", place);
+    //printf("Place attribuée: %d\n", place);
 
     int temps            = rand() % 300;
     int couleurs         = rand() % 5; 

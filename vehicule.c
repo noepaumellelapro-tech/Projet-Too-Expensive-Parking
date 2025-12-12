@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "vehicule.h"
+#include "ticketing.h"
 
 
 
@@ -88,7 +89,7 @@ Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, 
                 precedent->suivant = courant->suivant;
                 courant = courant->suivant;
             }
-            
+            encaisser_vehicule(suppression);
             detruireVehicule(suppression);
 
         } else {
@@ -111,6 +112,6 @@ Vehicule* creerVehicule(int x, int y, char direction, int vitesse, int couleur, 
         }
         
         *liste = NULL;
-        printf("liste liberée\n");
+        //printf("liste liberée\n");
     }
 
