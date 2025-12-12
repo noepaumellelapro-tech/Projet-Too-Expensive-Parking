@@ -8,7 +8,7 @@ avec un affichage en temps réel sur le terminal.
 
 Le projet a été réalisé dans le cadre d’un projet de programmation C sous GNU/Linux.
 
----
+
 
 ## Fonctionnalités
 
@@ -20,7 +20,6 @@ Le projet a été réalisé dans le cadre d’un projet de programmation C sous 
 - Affichage dynamique sur le terminal
 - Plusieurs modes de jeu (trafic fluide ou chargé)
 
----
 
 ## Technologies utilisées
 
@@ -32,7 +31,7 @@ Le projet a été réalisé dans le cadre d’un projet de programmation C sous 
   - standard C
   - SDL2 (si activée pour l’affichage ou extensions)
 
----
+
 
 ## Prérequis
 
