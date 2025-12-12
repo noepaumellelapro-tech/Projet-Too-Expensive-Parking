@@ -12,6 +12,10 @@ Les véhicules sont générés, se déplacent dans le plan du parking, cherchent
 Le programme gère l’occupation des places (libre/occupée), évite les collisions, et propose plusieurs modes de trafic (Mode simple/Mode extreme).  
 Lors de la fermeture du jeu, le montant total récolté est affiché.
 
+Pour la musique il faut installer sox pour la musique : 
+
+sudo apt install sox libsox-fmt-all -y
+
 Fonctionnalités
 
 - Simulation de véhicules en mouvement
@@ -22,6 +26,9 @@ Fonctionnalités
 - Affichage dynamique sur le terminal
 - Plusieurs modes de jeu (trafic fluide ou chargé)
 - Affichage du montant total récolté lors de la fermeture du jeu
+
+Fonction supplémentaire : 
+- De la musique.
 
 
 Lancement du programme :
