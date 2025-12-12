@@ -1,10 +1,10 @@
-# Simulateur de Parking – Projet C
+Simulateur de Parking – Projet C
 
 Ce projet est un simulateur de parking payant développé en langage C. Il permet de simuler la circulation et le stationnement de véhicules dans un parking, avec un affichage en temps réel sur le terminal.
 
 Le projet a été réalisé dans le cadre d’un projet de programmation C sous GNU/Linux.
 
-## Principes généraux :
+Principes généraux :
 
 Le projet simule le fonctionnement d’un parking payant en temps réel sur terminal.  
 Les véhicules sont générés, se déplacent dans le plan du parking, cherchent une place libre, se garent puis sortent.  
@@ -12,7 +12,7 @@ Les véhicules sont générés, se déplacent dans le plan du parking, cherchent
 Le programme gère l’occupation des places (libre/occupée), évite les collisions, et propose plusieurs modes de trafic (fluide/chargé).  
 Lors de la fermeture du jeu, le montant total récolté est affiché.
 
-## Fonctionnalités
+Fonctionnalités
 
 - Simulation de véhicules en mouvement
 - Entrée et sortie du parking avec barrières
@@ -24,15 +24,15 @@ Lors de la fermeture du jeu, le montant total récolté est affiché.
 - Affichage du montant total récolté lors de la fermeture du jeu
 
 
-## Lancement du programme :
+Lancement du programme :
 
-### Compilation :
+Compilation :
 
 ```bash
 make
 ```
 
-### Lancement du jeu.
+Lancement du jeu.
 
 Utiliser la commande suivante pour lancer le jeu :
 
@@ -40,7 +40,7 @@ Utiliser la commande suivante pour lancer le jeu :
 ./parking
 ```
 
-### Crédits :
+Crédits :
 
 - Code :
   
