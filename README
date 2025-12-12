@@ -1,14 +1,16 @@
 # Simulateur de Parking – Projet C
 
-## Description
-
-Ce projet est un simulateur de parking payant développé en langage C.  
-Il permet de simuler la circulation et le stationnement de véhicules dans un parking,
-avec un affichage en temps réel sur le terminal.
+Ce projet est un simulateur de parking payant développé en langage C. Il permet de simuler la circulation et le stationnement de véhicules dans un parking, avec un affichage en temps réel sur le terminal.
 
 Le projet a été réalisé dans le cadre d’un projet de programmation C sous GNU/Linux.
 
----
+## Principes généraux :
+
+Le projet simule le fonctionnement d’un parking payant en temps réel sur terminal.  
+Les véhicules sont générés, se déplacent dans le plan du parking, cherchent une place libre, se garent puis sortent.  
+À l’entrée, un ticket est attribué ; à la sortie, le paiement est calculé selon le temps passé.  
+Le programme gère l’occupation des places (libre/occupée), évite les collisions, et propose plusieurs modes de trafic (fluide/chargé).  
+Lors de la fermeture du jeu, le montant total récolté est affiché.
 
 ## Fonctionnalités
 
@@ -21,47 +23,29 @@ Le projet a été réalisé dans le cadre d’un projet de programmation C sous 
 - Plusieurs modes de jeu (trafic fluide ou chargé)
 - Affichage du montant total récolté lors de la fermeture du jeu
 
----
 
-## Technologies utilisées
+## Lancement du programme :
 
-- Langage : C
-- Environnement : GNU/Linux
-- Affichage : terminal (ASCII)
-- Compilation : gcc + Makefile
-- Bibliothèques :
-  - standard C
-  - SDL2 (si activée pour l’affichage ou extensions)
-
----
-
-## Prérequis et compilation
-
-Sous Debian / Ubuntu :
-
-```bash
-sudo apt install gcc make
-```
-
-Compilation du projet :
+### Compilation :
 
 ```bash
 make
 ```
 
-Exécution :
+### Lancement du jeu.
+
+Utiliser la commande suivante pour lancer le jeu :
 
 ```bash
 ./parking
 ```
 
----
+### Crédits :
 
-## Auteurs
-
-Projet réalisé en **trinôme** dans le cadre du  
-**Projet Autonome en Programmation C – ESIEA**
-
-- Noé PAUMELLE
-- Mohamed SEFRIOUI
-- Athiran NAGATHURAI
+- Code :
+  
+  - Noé PAUMELLE
+  
+  - Mohamed SEFRIOUI
+  
+  - Athiran NAGATHURAI
