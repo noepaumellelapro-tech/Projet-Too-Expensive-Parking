@@ -136,6 +136,7 @@ void afficherRect(SDL_Renderer* renderer, SDL_FRect* rect, int r, int g, int b){
     SDL_RenderFillRectF(renderer, rect);
 }
 
+/*  Fonction obsolète remplacée pour afficher une partie d'un vehicule
 void setInnerRect(SDL_FRect* innerRect, char c, char Map[MAX_ROWS][MAX_COLS], int i, int j, int x, int y, int w, int h){  //definit la taille du rectangle interne (pour les vitres)
     
     //Position et taille par défaut du rectangle interne
@@ -157,13 +158,13 @@ void setInnerRect(SDL_FRect* innerRect, char c, char Map[MAX_ROWS][MAX_COLS], in
         innerRect->h = h * 0.8f;
     }
 }
-
+*/
 void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows, int nb_cols, SDL_Rect rect) {
 
     float cellW = (float)rect.w / nb_cols;
     float cellH = (float)rect.h / nb_rows;
     
-    SDL_FRect innerRect;   //variable pour definir la taille et la position des rectangles internes
+    //SDL_FRect innerRect;   //variable pour definir la taille et la position des rectangles internes (obselete)
 
         for (int i = 0; i < nb_rows; i++) {
             for (int j = 0; j < nb_cols; j++) {
@@ -193,34 +194,34 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
                 case 'G':   //green
                     afficherRect(renderer, &cell, 0, 255, 0);
                     break;
-                case 'g': //green with middle white rectangle
-                    afficherRect(renderer, &cell, 0, 255, 0);
-                    setInnerRect(&innerRect, 'g', Map, i, j, cell.x, cell.y, cellW, cellH);
-                    afficherRect(renderer, &innerRect, 255, 255, 255);
-                    break;
+                //case 'g': //green with middle white rectangle
+                //    afficherRect(renderer, &cell, 0, 255, 0);
+                //    setInnerRect(&innerRect, 'g', Map, i, j, cell.x, cell.y, cellW, cellH);
+                //    afficherRect(renderer, &innerRect, 255, 255, 255);
+                //    break;
                 case 'R':   //red
                     afficherRect(renderer, &cell, 255, 0, 0);
                     break;
-                case 'r': //red with middle white rectangle
-                    afficherRect(renderer, &cell, 255, 0, 0);
-                    setInnerRect(&innerRect, 'r', Map, i, j, cell.x, cell.y, cellW, cellH);
-                    afficherRect(renderer, &innerRect, 255, 255, 255);
-                    break;
+                //case 'r': //red with middle white rectangle
+                //    afficherRect(renderer, &cell, 255, 0, 0);
+                //    setInnerRect(&innerRect, 'r', Map, i, j, cell.x, cell.y, cellW, cellH);
+                //    afficherRect(renderer, &innerRect, 255, 255, 255);
+                //    break;
                 case 'B':   //blue
                     afficherRect(renderer, &cell, 0, 0, 255);
                     break;
-                case 'b': //blue with middle white rectangle
-                    afficherRect(renderer, &cell, 0, 0, 255);
-                    setInnerRect(&innerRect, 'b', Map, i, j, cell.x, cell.y, cellW, cellH);
-                    afficherRect(renderer, &innerRect, 255, 255, 255);
-                    break;
+                //case 'b': //blue with middle white rectangle
+                //    afficherRect(renderer, &cell, 0, 0, 255);
+                //    setInnerRect(&innerRect, 'b', Map, i, j, cell.x, cell.y, cellW, cellH);
+                //    afficherRect(renderer, &innerRect, 255, 255, 255);
+                //    break;
                 case 'Y':   //Yellow
                     afficherRect(renderer, &cell, 255, 255, 0);
                     break;
-                case 'y': //yellow with middle white rectangle
-                    afficherRect(renderer, &cell, 255, 255, 0);
-                    setInnerRect(&innerRect, 'y', Map, i, j, cell.x, cell.y, cellW, cellH);
-                    afficherRect(renderer, &innerRect, 255, 255, 255);
+                //case 'y': //yellow with middle white rectangle
+                //    afficherRect(renderer, &cell, 255, 255, 0);
+                //    setInnerRect(&innerRect, 'y', Map, i, j, cell.x, cell.y, cellW, cellH);
+                //    afficherRect(renderer, &innerRect, 255, 255, 255);
                 default:    // espace ou autre caractère non géré
                     break;
             }

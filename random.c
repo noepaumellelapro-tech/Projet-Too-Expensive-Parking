@@ -27,14 +27,9 @@ void random_car(Vehicule **liste) {
 
     int temps            = rand() % 300;
     int couleurs         = rand() % 5; 
-    int vitesse          = rand() % 5; 
-    char type            = (rand() % 2)  ? 'C' : 'V'; // C pour voiture, V pour camion
-    char alignement      = (rand() % 2)  ? 'G' : 'D'; // G pour gauche, D pour droite 
     
-    char t[2][3];
-    randomCarModel(t);
 
-    Vehicule *v = creerVehicule(63, 137, 'O', vitesse, couleurs, alignement, type, 'M', temps, 0, 0, t, place);
+    Vehicule *v = creerVehicule(63, 137, 'O', couleurs, 'M', temps, 0, 0, place);
     ajoutervehicule(liste, v);
 
 }
@@ -58,7 +53,7 @@ void liberer_place(int place) {
     }
 }
 
-void randomCarModel(char voiture[2][3]) {
+void randomCarModel(char voiture[2][3]) {   //Obselete (fonction qui genere un modele de voiture aléatoire avec l'ancien affichage)
     int NbLignes = 0;
     
     FILE *FichierVoitures = fopen("ModelesVoitures", "r");
