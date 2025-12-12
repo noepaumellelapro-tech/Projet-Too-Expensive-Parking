@@ -6,45 +6,9 @@
 #include "random.h"
 #include "ticketing.h"
 
-static SDL_Surface* createFallbackCarSurface(void) {
-    const int texW = 120;
-    const int texH = 80;
-    SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormat(0, texW, texH, 32, SDL_PIXELFORMAT_RGBA32);
-    if (!surface) return NULL;
-
-    // Couleur de base (gris clair) et détails simples
-    SDL_FillRect(surface, NULL, SDL_MapRGBA(surface->format, 200, 200, 200, 255));
-    SDL_Rect cabine = { texW / 4, texH / 5, texW / 2, (texH * 3) / 5 };
-    SDL_FillRect(surface, &cabine, SDL_MapRGBA(surface->format, 240, 240, 240, 255));
-
-    SDL_Rect vitre = { texW / 3, texH / 4, texW / 3, texH / 2 };
-    SDL_FillRect(surface, &vitre, SDL_MapRGBA(surface->format, 30, 30, 40, 220));
-
-    SDL_Rect phareAvant = { texW - 12, texH / 3, 10, texH / 6 };
-    SDL_Rect phareArriere = { 2, texH / 3, 10, texH / 6 };
-    SDL_FillRect(surface, &phareAvant, SDL_MapRGBA(surface->format, 255, 230, 120, 255));
-    SDL_FillRect(surface, &phareArriere, SDL_MapRGBA(surface->format, 200, 40, 40, 255));
-
-    SDL_Rect roue1 = { texW / 6, texH / 12, texW / 5, texH / 6 };
-    SDL_Rect roue2 = { texW / 6, texH - texH / 4, texW / 5, texH / 6 };
-    SDL_Rect roue3 = { texW - texW / 3, texH / 12, texW / 5, texH / 6 };
-    SDL_Rect roue4 = { texW - texW / 3, texH - texH / 4, texW / 5, texH / 6 };
-    Uint32 pneu = SDL_MapRGBA(surface->format, 25, 25, 25, 255);
-    SDL_FillRect(surface, &roue1, pneu);
-    SDL_FillRect(surface, &roue2, pneu);
-    SDL_FillRect(surface, &roue3, pneu);
-    SDL_FillRect(surface, &roue4, pneu);
-
-    return surface;
-}
-
 static SDL_Texture* createCarTexture(SDL_Renderer* renderer) {
     const char* path = "assets/car.bmp";
     SDL_Surface* surface = SDL_LoadBMP(path);
-    if (!surface) {
-        SDL_Log("Impossible de charger %s (%s), utilisation d'une texture fallback.", path, SDL_GetError());
-        surface = createFallbackCarSurface();
-    }
     if (!surface) return NULL;
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -74,18 +38,18 @@ static void drawCars(SDL_Renderer* renderer, Vehicule* listeVehicules, SDL_Rect 
         if (texW == 0 || texH == 0) return;
     }
 
-    float longSize = 3.0f * cellSize;       // longueur commune
-    float horizShort = 2.0f * cellSize;     // hauteur quand horizontale
-    float vertNarrow = 2.2f * cellSize;     // largeur plus fine quand verticale (plus épaisse)
-    float vertLong = 3.2f * cellSize;       // longueur légèrement augmentée pour le vertical
+    float longSize =  3.0f * cellSize;       // longueur comunne
+    float horizShort = 2.0f * cellSize;     // hauteur quan horizontale
+    float vertNarrow = 2.2f * cellSize;     // largeur plus fine quand verticale (plus epaisse)
+    float vertLong =  3.2f * cellSize;       // longueur legrement aumentée pour le vertical
 
     for (Vehicule* v = listeVehicules; v != NULL; v = v->suivant) {
         int vertical = (v->direction == 'N' || v->direction == 'S');
 
         SDL_FRect dst;
-        dst.x = mapRect.x + v->y * cellSize;
-        dst.y = mapRect.y + v->x * cellSize;
-        // Pour les voitures verticales, on inverse les proportions (longueur sur l'axe X, largeur sur Y après rotation)
+        dst.x =  mapRect.x + v->y * cellSize;
+        dst.y = mapRect.y + v->x *  cellSize;
+        // Pour les voitures verticales, on inverse un peu les proportios (longuer sur l'axe X, largeur sur Y apres rotation)
         dst.w = vertical ? vertLong : longSize;
         dst.h = vertical ? vertNarrow : horizShort;
 
@@ -105,7 +69,7 @@ static void drawCars(SDL_Renderer* renderer, Vehicule* listeVehicules, SDL_Rect 
     }
 }
 
-//créé une fenetre SDL
+// cree une fenetre SDL (oui c'est mal ecrit exprés)
 SDL_Window* SDLCreateWindow(){
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -131,40 +95,15 @@ void SDLDestroyWindow(SDL_Window* window, SDL_Renderer* renderer){
     SDL_Quit();
 }
 
-void afficherRect(SDL_Renderer* renderer, SDL_FRect* rect, int r, int g, int b){    //Affiche un rectangle de couleur donnée dans la zone définie par rect
+void afficherRect(SDL_Renderer* renderer, SDL_FRect* rect, int r, int g, int b){    // Affiche un rectange de couleur donée dans la zone definie par rect
     SDL_SetRenderDrawColor(renderer, r, g, b, 255);
     SDL_RenderFillRectF(renderer, rect);
 }
 
-/*  Fonction obsolète remplacée pour afficher une partie d'un vehicule
-void setInnerRect(SDL_FRect* innerRect, char c, char Map[MAX_ROWS][MAX_COLS], int i, int j, int x, int y, int w, int h){  //definit la taille du rectangle interne (pour les vitres)
-    
-    //Position et taille par défaut du rectangle interne
-    innerRect->x = x + w * 0.25f;
-    innerRect->y = y + h * 0.25f;
-    innerRect->w = w * 0.5f;
-    innerRect->h = h * 0.5f;
-
-    //On trouve la direction dans laquelle on oriente le carré blanc (vitre de la voiture)
-    if (Map[i][j+1] == c){   //droite
-        innerRect->w = w * 0.8f;
-    } else if (Map[i][j-1] == c){ //gauche
-        innerRect->x = x;
-        innerRect->w = w * 0.75f;
-    } else if (Map[i-1][j] == c){ //haut
-        innerRect->y = y;
-        innerRect->h = h * 0.75f;
-    } else if (Map[i+1][j] == c){ //bas
-        innerRect->h = h * 0.8f;
-    }
-}
-*/
 void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows, int nb_cols, SDL_Rect rect) {
 
     float cellW = (float)rect.w / nb_cols;
     float cellH = (float)rect.h / nb_rows;
-    
-    //SDL_FRect innerRect;   //variable pour definir la taille et la position des rectangles internes (obselete)
 
         for (int i = 0; i < nb_rows; i++) {
             for (int j = 0; j < nb_cols; j++) {
@@ -186,43 +125,24 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
                                        cell.x + cellW / 2, cell.y + cellH);
                     break;
                 case '_':
-                    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                    SDL_SetRenderDrawColor(renderer,  255, 255, 255, 255);
                     SDL_RenderDrawLineF(renderer,
                                         cell.x, cell.y + cellH / 2,
                                         cell.x + cellW, cell.y + cellH / 2);
                     break;
-                case 'G':   //green
-                    afficherRect(renderer, &cell, 0, 255, 0);
+                case 'G':   // gren
+                    afficherRect(renderer, &cell, 0,  255, 0);
                     break;
-                //case 'g': //green with middle white rectangle
-                //    afficherRect(renderer, &cell, 0, 255, 0);
-                //    setInnerRect(&innerRect, 'g', Map, i, j, cell.x, cell.y, cellW, cellH);
-                //    afficherRect(renderer, &innerRect, 255, 255, 255);
-                //    break;
-                case 'R':   //red
+                case 'R':   // rid
                     afficherRect(renderer, &cell, 255, 0, 0);
                     break;
-                //case 'r': //red with middle white rectangle
-                //    afficherRect(renderer, &cell, 255, 0, 0);
-                //    setInnerRect(&innerRect, 'r', Map, i, j, cell.x, cell.y, cellW, cellH);
-                //    afficherRect(renderer, &innerRect, 255, 255, 255);
-                //    break;
-                case 'B':   //blue
-                    afficherRect(renderer, &cell, 0, 0, 255);
+                case 'B':   // blu
+                    afficherRect(renderer, &cell, 0,  0, 255);
                     break;
-                //case 'b': //blue with middle white rectangle
-                //    afficherRect(renderer, &cell, 0, 0, 255);
-                //    setInnerRect(&innerRect, 'b', Map, i, j, cell.x, cell.y, cellW, cellH);
-                //    afficherRect(renderer, &innerRect, 255, 255, 255);
-                //    break;
-                case 'Y':   //Yellow
+                case 'Y':   // yelow
                     afficherRect(renderer, &cell, 255, 255, 0);
                     break;
-                //case 'y': //yellow with middle white rectangle
-                //    afficherRect(renderer, &cell, 255, 255, 0);
-                //    setInnerRect(&innerRect, 'y', Map, i, j, cell.x, cell.y, cellW, cellH);
-                //    afficherRect(renderer, &innerRect, 255, 255, 255);
-                default:    // espace ou autre caractère non géré
+                default:    // espace ou autre caractere non geré
                     break;
             }
             
@@ -240,7 +160,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
 
     read_map(nomFichier, Map, nb_rows, nb_cols);
 
-    // Création du renderer
+    // Creation du render (oui je sais mal orthographié)
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer) {
         SDL_Log("Erreur création renderer: %s", SDL_GetError());
@@ -255,12 +175,12 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     int nbCols = *nb_cols;
     int nbRows = *nb_rows;
 
-    // --- Calcul précis en flottant ---
-    float cellW = (float)screenW / nbCols;
+    // --- Calcul presi en flottan ---
+    float cellW =  (float)screenW / nbCols;
     float cellH = (float)screenH / nbRows;
-    float CELL_SIZE = (cellW < cellH) ? cellW : cellH;
+    float CELL_SIZE = (cellW <  cellH) ? cellW : cellH;
 
-    // Calcul du rectangle englobant la map (en entiers pour SDL_Rect)
+    // Calcul du rectange engloban la map (en entier pour SDL_Rect)
     SDL_Rect rect;
     rect.w = (int)(nbCols * CELL_SIZE);
     rect.h = (int)(nbRows * CELL_SIZE);
@@ -284,22 +204,22 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
             }
         }
 
-        // Fond noir
+        // Fond noir  (basique)
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // Fond de la zone carte en gris béton
+        // Fond de la zone carte en gris beton (yes faute)
         SDL_SetRenderDrawColor(renderer, 95, 95, 95, 255);
         SDL_RenderFillRect(renderer, &rect);
 
-        // Rectangle blanc
+        // Rectange blanc
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderDrawRect(renderer, &rect);
         
-        //Vehicule sur la map
+        //  Vehicule sur la map
         SDL_Delay(delay);
 
-        //Permet de faire spawn des voitures toutes les 5 secondes
+        // Permet de fair spawn des voitures toute les 5 secondes
         
         spawn_compteur++;
             if (spawn_compteur >= 20) {  // toutes les  environ toutes les 5secondess
@@ -331,7 +251,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     return 0;
 }
 
-//lecture de la map depuis un fichier et affichage
+// lecture de la map depui un fichier et afichage
 int read_map(const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_rows, int *nb_cols)
 {
     int i = 0; // lignes
