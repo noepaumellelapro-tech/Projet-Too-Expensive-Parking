@@ -28,9 +28,6 @@ int supprimervoitureliste(Vehicule **liste);
 
 void afficherVehicule(Vehicule *v);
 
-void afficherliste(Vehicule *liste);
-
 void libererliste(Vehicule **liste);
-void mouvement_vehicules(Vehicule *listeVehicules, char Map[200][200]);
 
 #endif

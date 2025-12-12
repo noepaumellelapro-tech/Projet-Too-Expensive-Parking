@@ -1,5 +1,6 @@
 #include "Interface.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include "vehicule.h"
 #include "mouvement.h"
@@ -38,10 +39,10 @@ static void drawCars(SDL_Renderer* renderer, Vehicule* listeVehicules, SDL_Rect 
         if (texW == 0 || texH == 0) return;
     }
 
-    float longSize =  3.0f * cellSize;       // longueur comunne
-    float horizShort = 2.0f * cellSize;     // hauteur quan horizontale
+    float longSize =  3.0f * cellSize;       // longueur commune
+    float horizShort = 2.0f * cellSize;     // hauteur quand horizontale
     float vertNarrow = 2.2f * cellSize;     // largeur plus fine quand verticale (plus epaisse)
-    float vertLong =  3.2f * cellSize;       // longueur legrement aumentée pour le vertical
+    float vertLong =  3.2f * cellSize;       // longueur legerement augmenter pour le vertical
 
     for (Vehicule* v = listeVehicules; v != NULL; v = v->suivant) {
         int vertical = (v->direction == 'N' || v->direction == 'S');
@@ -49,7 +50,7 @@ static void drawCars(SDL_Renderer* renderer, Vehicule* listeVehicules, SDL_Rect 
         SDL_FRect dst;
         dst.x =  mapRect.x + v->y * cellSize;
         dst.y = mapRect.y + v->x *  cellSize;
-        // Pour les voitures verticales, on inverse un peu les proportios (longuer sur l'axe X, largeur sur Y apres rotation)
+        // Pour les voitures verticales, on inverse un peu les proportion (longuer sur l'axe X, largeur sur Y apres rotation)
         dst.w = vertical ? vertLong : longSize;
         dst.h = vertical ? vertNarrow : horizShort;
 
@@ -69,7 +70,7 @@ static void drawCars(SDL_Renderer* renderer, Vehicule* listeVehicules, SDL_Rect 
     }
 }
 
-// cree une fenetre SDL (oui c'est mal ecrit exprés)
+// cree une fenetre SDL
 SDL_Window* SDLCreateWindow(){
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -93,6 +94,8 @@ void SDLDestroyWindow(SDL_Window* window, SDL_Renderer* renderer){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+    system("kill $(pidof play)");
+
 }
 
 void afficherRect(SDL_Renderer* renderer, SDL_FRect* rect, int r, int g, int b){    // Affiche un rectange de couleur donée dans la zone definie par rect
@@ -130,16 +133,16 @@ void DessinMap(SDL_Renderer* renderer, char Map[MAX_ROWS][MAX_COLS], int nb_rows
                                         cell.x, cell.y + cellH / 2,
                                         cell.x + cellW, cell.y + cellH / 2);
                     break;
-                case 'G':   // gren
+                case 'G':   // green
                     afficherRect(renderer, &cell, 0,  255, 0);
                     break;
-                case 'R':   // rid
+                case 'R':   // red
                     afficherRect(renderer, &cell, 255, 0, 0);
                     break;
-                case 'B':   // blu
+                case 'B':   // blue
                     afficherRect(renderer, &cell, 0,  0, 255);
                     break;
-                case 'Y':   // yelow
+                case 'Y':   // yellow
                     afficherRect(renderer, &cell, 255, 255, 0);
                     break;
                 default:    // espace ou autre caractere non geré
@@ -157,10 +160,11 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
 
 
     SDL_Window* window = SDLCreateWindow();
-
+    system("pwd"); 
+    system("play -q house.mp3 &");
     read_map(nomFichier, Map, nb_rows, nb_cols);
 
-    // Creation du render (oui je sais mal orthographié)
+    // Creation du render 
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer) {
         SDL_Log("Erreur création renderer: %s", SDL_GetError());
@@ -180,7 +184,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
     float cellH = (float)screenH / nbRows;
     float CELL_SIZE = (cellW <  cellH) ? cellW : cellH;
 
-    // Calcul du rectange engloban la map (en entier pour SDL_Rect)
+    // Calcul du rectangle englobant la map (en entier pour SDL_Rect)
     SDL_Rect rect;
     rect.w = (int)(nbCols * CELL_SIZE);
     rect.h = (int)(nbRows * CELL_SIZE);
@@ -208,7 +212,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // Fond de la zone carte en gris beton (yes faute)
+        // Fond de la zone carte en gris
         SDL_SetRenderDrawColor(renderer, 95, 95, 95, 255);
         SDL_RenderFillRect(renderer, &rect);
 
@@ -219,7 +223,7 @@ int interface (const char *nomFichier, char Map[MAX_ROWS][MAX_COLS], int *nb_row
         //  Vehicule sur la map
         SDL_Delay(delay);
 
-        // Permet de fair spawn des voitures toute les 5 secondes
+        // Permet de faire spawn des voitures toute les 5 secondes
         
         spawn_compteur++;
             if (spawn_compteur >= 20) {  // toutes les  environ toutes les 5secondess
